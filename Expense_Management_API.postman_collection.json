@@ -1,0 +1,762 @@
+{
+  "info": {
+    "name": "Expense Management API",
+    "description": "Complete API collection for Expense Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Create Admin User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Admin\",\n  \"lastName\": \"User\",\n  \"email\": \"admin@company.com\",\n  \"password\": \"admin123456\",\n  \"country\": \"United States\",\n  \"companyName\": \"Acme Corporation\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/create-admin",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "create-admin"]
+            },
+            "description": "Create the first admin user with a company"
+          }
+        },
+        {
+          "name": "Create Test Data",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"companyName\": \"Test Company\",\n  \"country\": \"United States\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/create-test-data",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "create-test-data"]
+            },
+            "description": "Create complete test environment with users"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set(\"token\", jsonData.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@company.com\",\n  \"password\": \"admin123456\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Login and get JWT token"
+          }
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "me"]
+            },
+            "description": "Get current logged in user details"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["users"]
+            },
+            "description": "Get all users in company (Admin only)"
+          }
+        },
+        {
+          "name": "Get All Users (Filtered)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users?role=employee&isActive=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["users"],
+              "query": [
+                {
+                  "key": "role",
+                  "value": "employee"
+                },
+                {
+                  "key": "isActive",
+                  "value": "true"
+                }
+              ]
+            },
+            "description": "Get filtered users"
+          }
+        },
+        {
+          "name": "Create Manager",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Manager\",\n  \"email\": \"manager@company.com\",\n  \"password\": \"manager123456\",\n  \"role\": \"manager\",\n  \"country\": \"United States\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["users"]
+            },
+            "description": "Create a new manager user"
+          }
+        },
+        {
+          "name": "Create Employee",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Employee\",\n  \"email\": \"employee@company.com\",\n  \"password\": \"employee123456\",\n  \"role\": \"employee\",\n  \"manager\": \"MANAGER_ID_HERE\",\n  \"country\": \"United States\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["users"]
+            },
+            "description": "Create a new employee user"
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "USER_ID_HERE"
+                }
+              ]
+            },
+            "description": "Get single user details"
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Updated\",\n  \"lastName\": \"Name\",\n  \"role\": \"manager\",\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "USER_ID_HERE"
+                }
+              ]
+            },
+            "description": "Update user details"
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "USER_ID_HERE"
+                }
+              ]
+            },
+            "description": "Delete user"
+          }
+        },
+        {
+          "name": "Get User Statistics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "stats"]
+            },
+            "description": "Get user statistics"
+          }
+        },
+        {
+          "name": "Get My Employees",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/my-employees",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "my-employees"]
+            },
+            "description": "Get employees under manager"
+          }
+        },
+        {
+          "name": "Update My Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Updated\",\n  \"lastName\": \"Name\",\n  \"country\": \"Canada\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/updateMe",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "updateMe"]
+            },
+            "description": "Update own profile"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Expenses",
+      "item": [
+        {
+          "name": "Create Expense",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Client Dinner\",\n  \"description\": \"Dinner with client at restaurant\",\n  \"amount\": 150.50,\n  \"currency\": \"USD\",\n  \"category\": \"Food\",\n  \"date\": \"2025-01-10\",\n  \"notes\": \"Discussed Q1 project requirements\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/expenses",
+              "host": ["{{baseUrl}}"],
+              "path": ["expenses"]
+            },
+            "description": "Create a new expense"
+          }
+        },
+        {
+          "name": "Get All Expenses",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/expenses",
+              "host": ["{{baseUrl}}"],
+              "path": ["expenses"]
+            },
+            "description": "Get all expenses (filtered by role)"
+          }
+        },
+        {
+          "name": "Get Pending Expenses",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/expenses?status=pending",
+              "host": ["{{baseUrl}}"],
+              "path": ["expenses"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "pending"
+                }
+              ]
+            },
+            "description": "Get pending expenses"
+          }
+        },
+        {
+          "name": "Get Expense by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/expenses/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["expenses", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "EXPENSE_ID_HERE"
+                }
+              ]
+            },
+            "description": "Get single expense details"
+          }
+        },
+        {
+          "name": "Update Expense",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Title\",\n  \"amount\": 175.00,\n  \"description\": \"Updated description\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/expenses/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["expenses", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "EXPENSE_ID_HERE"
+                }
+              ]
+            },
+            "description": "Update expense (own pending only)"
+          }
+        },
+        {
+          "name": "Delete Expense",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/expenses/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["expenses", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "EXPENSE_ID_HERE"
+                }
+              ]
+            },
+            "description": "Delete expense (own pending only)"
+          }
+        },
+        {
+          "name": "Approve Expense",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/expenses/:id/approve",
+              "host": ["{{baseUrl}}"],
+              "path": ["expenses", ":id", "approve"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "EXPENSE_ID_HERE"
+                }
+              ]
+            },
+            "description": "Approve expense (Manager/Admin)"
+          }
+        },
+        {
+          "name": "Reject Expense",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rejectionReason\": \"Receipt is not clear. Please resubmit with a better quality image.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/expenses/:id/reject",
+              "host": ["{{baseUrl}}"],
+              "path": ["expenses", ":id", "reject"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "EXPENSE_ID_HERE"
+                }
+              ]
+            },
+            "description": "Reject expense (Manager/Admin)"
+          }
+        },
+        {
+          "name": "Get Expense Statistics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/expenses/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["expenses", "stats"]
+            },
+            "description": "Get expense statistics and analytics"
+          }
+        },
+        {
+          "name": "Get Pending Count",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/expenses/pending-count",
+              "host": ["{{baseUrl}}"],
+              "path": ["expenses", "pending-count"]
+            },
+            "description": "Get pending expenses count (Manager/Admin)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "item": [
+        {
+          "name": "Get My Notifications",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/notifications",
+              "host": ["{{baseUrl}}"],
+              "path": ["notifications"]
+            },
+            "description": "Get all notifications for current user"
+          }
+        },
+        {
+          "name": "Get Unread Notifications",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/notifications?isRead=false",
+              "host": ["{{baseUrl}}"],
+              "path": ["notifications"],
+              "query": [
+                {
+                  "key": "isRead",
+                  "value": "false"
+                }
+              ]
+            },
+            "description": "Get unread notifications"
+          }
+        },
+        {
+          "name": "Get Unread Count",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/notifications/unread-count",
+              "host": ["{{baseUrl}}"],
+              "path": ["notifications", "unread-count"]
+            },
+            "description": "Get count of unread notifications"
+          }
+        },
+        {
+          "name": "Mark as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/notifications/:id/read",
+              "host": ["{{baseUrl}}"],
+              "path": ["notifications", ":id", "read"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "NOTIFICATION_ID_HERE"
+                }
+              ]
+            },
+            "description": "Mark notification as read"
+          }
+        },
+        {
+          "name": "Mark All as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/notifications/mark-all-read",
+              "host": ["{{baseUrl}}"],
+              "path": ["notifications", "mark-all-read"]
+            },
+            "description": "Mark all notifications as read"
+          }
+        },
+        {
+          "name": "Delete Notification",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/notifications/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["notifications", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "NOTIFICATION_ID_HERE"
+                }
+              ]
+            },
+            "description": "Delete notification"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        },
+        "description": "Check if server is running"
+      }
+    }
+  ]
+}

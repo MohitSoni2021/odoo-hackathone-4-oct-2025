@@ -1,0 +1,14 @@
+{
+  "name": "expense-management-app",
+  "version": "1.0.0",
+  "description": "Expense management web application",
+  "scripts": {
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "start:frontend": "cd frontend && npm start",
+    "start:backend": "cd backend && npm run dev",
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
