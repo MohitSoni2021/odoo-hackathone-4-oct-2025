@@ -60,7 +60,7 @@ const Signup = () => {
   return (
     <div className="min-h-screen flex">
       {/* Left Side – Brand & Copy (Same as Login) */}
-      <div className="hidden lg:flex flex-col justify-center items-start bg-black text-white px-16 flex-1">
+      <div className="hidden lg:flex flex-col pt-10 items-start bg-black text-white px-16 flex-1">
         <div className="max-w-xl">
           {/* Logo */}
           <div className="flex items-center gap-3 mb-20">
@@ -92,7 +92,7 @@ const Signup = () => {
       {/* Right Side – Signup Form */}
       <div className="flex-1 flex items-center justify-center bg-gray-50 px-8">
         <div className="w-full max-w-md">
-          <div className="text-center mb-10">
+          <div className="text-center mb-10 mt-10">
             <h2 className="text-4xl font-extrabold text-gray-900">Get started</h2>
             <p className="mt-3 text-gray-600">Create your Ontime account</p>
           </div>
