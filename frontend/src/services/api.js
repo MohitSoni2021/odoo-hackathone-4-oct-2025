@@ -13,8 +13,8 @@ const api = axios.create({
 // Request interceptor to add token
 api.interceptors.request.use(
   (config) => {
-    // Get token from user object in localStorage
-    const userStr = localStorage.getItem('user');
+    // Get token from user object in sessionStorage
+    const userStr = sessionStorage.getItem('user');
     if (userStr) {
       try {
         const user = JSON.parse(userStr);
@@ -28,7 +28,7 @@ api.interceptors.request.use(
           config.headers.Authorization = `Bearer ${user.token}`;
         }
       } catch (error) {
-        console.error('Error parsing user from localStorage:', error);
+        console.error('Error parsing user from sessionStorage:', error);
       }
     }
     return config;
@@ -44,7 +44,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       // Token expired or invalid
-      localStorage.removeItem('user');
+      sessionStorage.removeItem('user');
       window.location.href = '/login';
     }
     return Promise.reject(error);

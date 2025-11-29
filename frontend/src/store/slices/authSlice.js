@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import authService from '../../services/authService';
 
-// Get user from localStorage
-const user = JSON.parse(localStorage.getItem('user'));
+// Get user from sessionStorage
+const user = JSON.parse(sessionStorage.getItem('user'));
 
 const initialState = {
   user: user ? user : null,
@@ -86,7 +86,7 @@ export const authSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload;
       state.isAuthenticated = true;
-      localStorage.setItem('user', JSON.stringify(action.payload));
+      sessionStorage.setItem('user', JSON.stringify(action.payload));
     },
   },
   extraReducers: (builder) => {

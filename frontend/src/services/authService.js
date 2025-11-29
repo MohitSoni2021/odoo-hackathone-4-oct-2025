@@ -18,7 +18,7 @@ const register = async (userData) => {
       firstName: data.user.firstName,
       lastName: data.user.lastName,
     };
-    localStorage.setItem('user', JSON.stringify(userWithToken));
+    sessionStorage.setItem('user', JSON.stringify(userWithToken));
     return userWithToken;
   }
 
@@ -41,7 +41,7 @@ const login = async (userData) => {
       firstName: data.user.firstName,
       lastName: data.user.lastName,
     };
-    localStorage.setItem('user', JSON.stringify(userWithToken));
+    sessionStorage.setItem('user', JSON.stringify(userWithToken));
     return userWithToken;
   }
 
@@ -50,7 +50,7 @@ const login = async (userData) => {
 
 // Logout user
 const logout = () => {
-  localStorage.removeItem('user');
+  sessionStorage.removeItem('user');
 };
 
 // Get current user
@@ -68,7 +68,7 @@ const getCurrentUser = async (token) => {
 
 // Update user profile
 const updateUserProfile = async (userData) => {
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(sessionStorage.getItem('user'));
   const config = {
     headers: {
       Authorization: `Bearer ${user.token}`,
@@ -78,12 +78,12 @@ const updateUserProfile = async (userData) => {
   const response = await axios.patch(API_URL + '/updateMe', userData, config);
 
   if (response.data) {
-    // Update localStorage with new user data
+    // Update sessionStorage with new user data
     const updatedUser = {
       ...user,
       ...response.data.data.user,
     };
-    localStorage.setItem('user', JSON.stringify(updatedUser));
+    sessionStorage.setItem('user', JSON.stringify(updatedUser));
   }
 
   return response.data;
