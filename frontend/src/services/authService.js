@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { encryptData, decryptData } from '../utils/encryption';
 
 const API_URL = process.env.REACT_APP_API_URL + '/auth';
 
@@ -18,7 +19,8 @@ const register = async (userData) => {
       firstName: data.user.firstName,
       lastName: data.user.lastName,
     };
-    sessionStorage.setItem('user', JSON.stringify(userWithToken));
+    const encryptedUser = encryptData(userWithToken);
+    sessionStorage.setItem('user', encryptedUser);
     return userWithToken;
   }
 
@@ -41,7 +43,8 @@ const login = async (userData) => {
       firstName: data.user.firstName,
       lastName: data.user.lastName,
     };
-    sessionStorage.setItem('user', JSON.stringify(userWithToken));
+    const encryptedUser = encryptData(userWithToken);
+    sessionStorage.setItem('user', encryptedUser);
     return userWithToken;
   }
 
@@ -68,7 +71,13 @@ const getCurrentUser = async (token) => {
 
 // Update user profile
 const updateUserProfile = async (userData) => {
-  const user = JSON.parse(sessionStorage.getItem('user'));
+  const encryptedUser = sessionStorage.getItem('user');
+  const user = encryptedUser ? decryptData(encryptedUser) : null;
+  
+  if (!user) {
+    throw new Error('User not found in sessionStorage');
+  }
+  
   const config = {
     headers: {
       Authorization: `Bearer ${user.token}`,
@@ -83,7 +92,8 @@ const updateUserProfile = async (userData) => {
       ...user,
       ...response.data.data.user,
     };
-    sessionStorage.setItem('user', JSON.stringify(updatedUser));
+    const encryptedUpdatedUser = encryptData(updatedUser);
+    sessionStorage.setItem('user', encryptedUpdatedUser);
   }
 
   return response.data;
