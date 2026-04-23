@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { encryptData, decryptData } from '../utils/encryption';
+import { decryptData } from '../utils/encryption';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 

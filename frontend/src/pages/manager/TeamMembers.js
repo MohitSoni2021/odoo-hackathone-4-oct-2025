@@ -5,7 +5,6 @@ import {
   UsersIcon,
   MagnifyingGlassIcon,
   EnvelopeIcon,
-  PhoneIcon,
   MapPinIcon,
   BriefcaseIcon,
   CurrencyDollarIcon,

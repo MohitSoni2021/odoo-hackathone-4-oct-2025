@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import {
-  LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
+  AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
 import {
@@ -20,11 +19,10 @@ import { useCurrency } from '../../hooks/useCurrency';
 import api from '../../services/api';
 
 const ManagerAnalytics = () => {
-  const { user } = useSelector((state) => state.auth);
-  const { formatAmount, formatExpenseAmount } = useCurrency();
+  const { formatExpenseAmount } = useCurrency();
   const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [dateRange, setDateRange] = useState('all');
+  const [dateRange] = useState('all');
 
   useEffect(() => {
     fetchAnalytics();

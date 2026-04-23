@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import expenseService from '../../services/expenseService';
 import { useCurrency } from '../../hooks/useCurrency';
 import { toast } from 'react-toastify';
@@ -27,6 +26,7 @@ const ExpenseDetail = () => {
 
   useEffect(() => {
     fetchExpenseDetail();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const fetchExpenseDetail = async () => {
