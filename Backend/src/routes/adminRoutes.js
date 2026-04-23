@@ -5,6 +5,14 @@ const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * tags:
+ *   name: Admin
+ *   description: Administrative and initial setup API
+ */
+
+
 // Helper function to create JWT token
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -41,9 +49,42 @@ const getCurrencyByCountry = (country) => {
 };
 
 /**
- * @route   POST /api/admin/create-admin
- * @desc    Create a new admin user with company
- * @access  Public (for initial setup only - should be secured in production)
+ * @swagger
+ * /api/admin/create-admin:
+ *   post:
+ *     summary: Create a new admin user with company
+ *     tags: [Admin]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - firstName
+ *               - lastName
+ *               - email
+ *               - password
+ *               - country
+ *               - companyName
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *               lastName:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               country:
+ *                 type: string
+ *               companyName:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Admin user and company created successfully
+ *       400:
+ *         description: Bad request
  */
 
 router.post('/create-admin', async (req, res) => {
@@ -133,9 +174,26 @@ router.post('/create-admin', async (req, res) => {
 });
 
 /**
- * @route   POST /api/admin/create-test-data
- * @desc    Create test data (admin, managers, employees, expenses)
- * @access  Public (for development only)
+ * @swagger
+ * /api/admin/create-test-data:
+ *   post:
+ *     summary: Create test data (admin, managers, employees, expenses)
+ *     tags: [Admin]
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               companyName:
+ *                 type: string
+ *               country:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Test data created successfully
+ *       400:
+ *         description: Bad request
  */
 router.post('/create-test-data', async (req, res) => {
   try {

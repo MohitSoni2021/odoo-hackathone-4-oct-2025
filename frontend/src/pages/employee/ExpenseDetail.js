@@ -30,10 +30,20 @@ const ExpenseDetail = () => {
   }, [id]);
 
   const fetchExpenseDetail = async () => {
+    if (!id) {
+      toast.error('Expense ID is missing');
+      navigate('/dashboard/expenses');
+      return;
+    }
+    
     try {
       setLoading(true);
       const data = await expenseService.getExpenseById(id);
-      setExpense(data.expense);
+      if (data && data.expense) {
+        setExpense(data.expense);
+      } else {
+        throw new Error('Expense not found');
+      }
     } catch (error) {
       toast.error(error.message || 'Failed to fetch expense details');
       navigate('/dashboard/expenses');

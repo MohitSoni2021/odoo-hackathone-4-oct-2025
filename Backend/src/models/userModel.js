@@ -2,6 +2,46 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - firstName
+ *         - lastName
+ *         - email
+ *         - password
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: Auto-generated id
+ *         firstName:
+ *           type: string
+ *         lastName:
+ *           type: string
+ *         email:
+ *           type: string
+ *           format: email
+ *         role:
+ *           type: string
+ *           enum: [admin, manager, employee]
+ *         country:
+ *           type: string
+ *         preferredCurrency:
+ *           type: string
+ *         isActive:
+ *           type: boolean
+ *         isFirstLogin:
+ *           type: boolean
+ *       example:
+ *         firstName: John
+ *         lastName: Doe
+ *         email: john@example.com
+ *         role: employee
+ *         country: United States
+ */
 const userSchema = new mongoose.Schema(
   {
     firstName: {

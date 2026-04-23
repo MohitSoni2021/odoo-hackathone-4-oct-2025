@@ -24,7 +24,11 @@ const MyExpenses = () => {
   const [filteredExpenses, setFilteredExpenses] = useState([]);
 
   useEffect(() => {
-    dispatch(fetchExpenses());
+    const loadExpenses = async () => {
+      const result = await dispatch(fetchExpenses());
+      console.log('Expenses data:', result.payload);
+    };
+    loadExpenses();
   }, [dispatch]);
 
   useEffect(() => {
@@ -258,11 +262,11 @@ const MyExpenses = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
                         className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadge(
-                          expense.status
+                          expense.status || 'pending'
                         )}`}
                       >
-                        {expense.status.charAt(0).toUpperCase() +
-                          expense.status.slice(1)}
+                        {(expense.status || 'pending').charAt(0).toUpperCase() +
+                          (expense.status || 'pending').slice(1)}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">

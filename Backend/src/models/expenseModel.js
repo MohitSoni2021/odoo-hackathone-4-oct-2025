@@ -1,5 +1,52 @@
 const mongoose = require('mongoose');
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Expense:
+ *       type: object
+ *       required:
+ *         - title
+ *         - amount
+ *         - category
+ *         - date
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: Auto-generated id
+ *         title:
+ *           type: string
+ *         description:
+ *           type: string
+ *         amount:
+ *           type: number
+ *         currency:
+ *           type: string
+ *         category:
+ *           type: string
+ *           enum: [Travel, Food, Accommodation, Transportation, Office Supplies, Entertainment, Training, Software, Hardware, Other]
+ *         date:
+ *           type: string
+ *           format: date-time
+ *         status:
+ *           type: string
+ *           enum: [pending, approved_by_manager, approved, rejected, reimbursed]
+ *         submittedBy:
+ *           type: string
+ *           description: User ID of the submitter
+ *         company:
+ *           type: string
+ *           description: Company ID
+ *       example:
+ *         title: Business Trip to London
+ *         description: Flight and hotel expenses
+ *         amount: 1500
+ *         currency: USD
+ *         category: Travel
+ *         date: 2024-04-23T10:00:00Z
+ *         status: pending
+ */
 const expenseSchema = new mongoose.Schema(
   {
     title: {

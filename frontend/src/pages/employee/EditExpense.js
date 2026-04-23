@@ -51,10 +51,20 @@ const EditExpense = () => {
   }, [id]);
 
   const fetchExpense = async () => {
+    if (!id) {
+      toast.error('Expense ID is missing');
+      navigate('/dashboard/expenses');
+      return;
+    }
+
     try {
       setFetchLoading(true);
-      const data = await expenseService.getExpenseById(id);
-      const expense = data.expense;
+      const { data } = await expenseService.getExpenseById(id);
+      const expense = data?.expense;
+
+      if (!expense) {
+        throw new Error('Expense not found');
+      }
 
       // Check if expense can be edited
       if (expense.status !== 'pending') {

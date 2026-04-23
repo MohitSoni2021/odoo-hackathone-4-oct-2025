@@ -17,6 +17,8 @@ const expenseRoutes = require('./routes/expenseRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const currencyRoutes = require('./routes/currencyRoutes');
+const { swaggerUi, specs } = require('./config/swagger');
+
 
 const app = express();
 
@@ -38,6 +40,10 @@ app.use('/api/expenses', expenseRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/currency', currencyRoutes);
+
+// Swagger API Documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
 
 // Health check route
 app.get('/api/health', (req, res) => {
