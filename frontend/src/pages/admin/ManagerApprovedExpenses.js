@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
   MagnifyingGlassIcon,
   EyeIcon,
   CheckCircleIcon,
   XCircleIcon,
-  CalendarIcon,
   CurrencyDollarIcon,
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
@@ -17,7 +16,6 @@ import api from '../../services/api';
 
 const ManagerApprovedExpenses = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
   const { formatExpenseAmount, formatAmount } = useCurrency(); // Fixed: proper destructuring
 
   const [expenses, setExpenses] = useState([]);

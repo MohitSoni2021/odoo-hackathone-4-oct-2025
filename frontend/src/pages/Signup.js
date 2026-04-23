@@ -196,8 +196,8 @@ const Signup = () => {
 
           <p className="mt-12 text-center text-xs text-gray-500">
             By signing up, you agree to our{' '}
-            <a href="#" className="underline">Terms</a> and{' '}
-            <a href="#" className="underline">Privacy Policy</a>
+            <a href="#!" className="underline">Terms</a> and{' '}
+            <a href="#!" className="underline">Privacy Policy</a>
             <br />© 2025 Ontime. All rights reserved.
           </p>
         </div>

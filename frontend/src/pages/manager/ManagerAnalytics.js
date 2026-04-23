@@ -108,19 +108,6 @@ const ManagerAnalytics = () => {
     count: item.count
   }));
 
-  // Status breakdown
-  const statusData = analytics.teamOverview.statusBreakdown.map(item => ({
-    name: item._id,
-    value: item.count
-  }));
-
-  // Currency breakdown
-  const currencyData = analytics.currencyBreakdown.map(item => ({
-    name: item._id,
-    amount: item.totalAmount,
-    count: item.count
-  }));
-
   return (
     <div className="space-y-6">
       {/* Header */}

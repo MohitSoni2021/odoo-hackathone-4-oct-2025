@@ -18,7 +18,7 @@ const EmployeeDashboard = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { expenses, loading } = useSelector((state) => state.expenses);
-  const { userCurrency, formatAmount, formatExpenseAmount } = useCurrency();
+  const { formatAmount, formatExpenseAmount } = useCurrency();
   const [stats, setStats] = useState({
     total: 0,
     pending: 0,
