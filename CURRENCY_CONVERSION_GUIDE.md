@@ -274,7 +274,7 @@ curl "http://localhost:5000/api/currency/convert?amount=100&from=USD&to=EUR"
 ## Troubleshooting
 
 ### Issue: Currency not updating
-**Solution:** Clear browser cache and localStorage, then login again
+**Solution:** Clear browser cache and sessionStorage, then login again
 
 ### Issue: Conversion showing incorrect amounts
 **Solution:** Check Frankfurter API status, verify exchange rates are current

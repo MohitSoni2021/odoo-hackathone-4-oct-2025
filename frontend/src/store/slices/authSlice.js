@@ -1,8 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import authService from '../../services/authService';
+import { decryptData, encryptData } from '../../utils/encryption';
 
-// Get user from localStorage
-const user = JSON.parse(localStorage.getItem('user'));
+// Get user from sessionStorage
+const encryptedUser = sessionStorage.getItem('user');
+const user = encryptedUser ? decryptData(encryptedUser) : null;
 
 const initialState = {
   user: user ? user : null,
@@ -86,7 +88,8 @@ export const authSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload;
       state.isAuthenticated = true;
-      localStorage.setItem('user', JSON.stringify(action.payload));
+      const encryptedUser = encryptData(action.payload);
+      sessionStorage.setItem('user', encryptedUser);
     },
   },
   extraReducers: (builder) => {

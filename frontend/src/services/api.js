@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { encryptData, decryptData } from '../utils/encryption';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
@@ -13,22 +14,24 @@ const api = axios.create({
 // Request interceptor to add token
 api.interceptors.request.use(
   (config) => {
-    // Get token from user object in localStorage
-    const userStr = localStorage.getItem('user');
-    if (userStr) {
+    // Get token from user object in sessionStorage
+    const encryptedUserStr = sessionStorage.getItem('user');
+    if (encryptedUserStr) {
       try {
-        const user = JSON.parse(userStr);
-        console.log('API Request:', {
-          url: config.url,
-          method: config.method,
-          userRole: user?.role,
-          hasToken: !!user?.token,
-        });
-        if (user && user.token) {
-          config.headers.Authorization = `Bearer ${user.token}`;
+        const user = decryptData(encryptedUserStr);
+        if (user) {
+          console.log('API Request:', {
+            url: config.url,
+            method: config.method,
+            userRole: user?.role,
+            hasToken: !!user?.token,
+          });
+          if (user && user.token) {
+            config.headers.Authorization = `Bearer ${user.token}`;
+          }
         }
       } catch (error) {
-        console.error('Error parsing user from localStorage:', error);
+        console.error('Error decrypting user from sessionStorage:', error);
       }
     }
     return config;
@@ -44,7 +47,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       // Token expired or invalid
-      localStorage.removeItem('user');
+      sessionStorage.removeItem('user');
       window.location.href = '/login';
     }
     return Promise.reject(error);
