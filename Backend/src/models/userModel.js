@@ -26,7 +26,7 @@ const validator = require('validator');
  *           format: email
  *         role:
  *           type: string
- *           enum: [admin, manager, employee]
+ *           enum: [superadmin, admin, manager, employee]
  *         country:
  *           type: string
  *         preferredCurrency:
@@ -69,7 +69,7 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['admin', 'manager', 'employee'],
+      enum: ['superadmin', 'admin', 'manager', 'employee'],
       default: 'employee',
     },
     company: {

@@ -43,10 +43,16 @@ const DashboardLayout = () => {
   // Dynamic navigation based on role
   const getNavigation = () => {
     const baseNav = [
-      { name: 'Dashboard', href: '/dashboard', icon: HomeIcon, roles: ['admin', 'manager', 'employee'] },
+      { name: 'Dashboard', href: '/dashboard', icon: HomeIcon, roles: ['superadmin', 'admin', 'manager', 'employee'] },
     ];
 
-    if (user?.role === 'admin') {
+    if (user?.role === 'superadmin') {
+      return [
+        ...baseNav,
+        { name: 'Notifications', href: '/dashboard/notifications', icon: BellIcon, roles: ['superadmin'] },
+        { name: 'Settings', href: '/dashboard/settings', icon: Cog6ToothIcon, roles: ['superadmin'] },
+      ];
+    } else if (user?.role === 'admin') {
       return [
         ...baseNav,
         { name: 'Users', href: '/dashboard/users', icon: UsersIcon, roles: ['admin'] },
@@ -94,60 +100,63 @@ const DashboardLayout = () => {
         }`}
       >
         <div
-          className="fixed inset-0 bg-gray-600 bg-opacity-75"
+          className="fixed inset-0 bg-primary/60 backdrop-blur-sm"
           onClick={() => setSidebarOpen(false)}
         ></div>
-        <div className="fixed inset-y-0 left-0 flex w-64 flex-col bg-black">
-          <div className="flex items-center justify-between px-4 py-4">
-            <h1 className="text-xl font-bold text-white">ExpenseTracker</h1>
+        <div className="fixed inset-y-0 left-0 flex w-72 flex-col bg-primary shadow-2xl transition-transform duration-300 transform">
+          <div className="flex items-center justify-between px-6 py-8">
+            <h1 className="text-2xl font-bold tracking-tight text-white flex items-center">
+              <span className="w-8 h-8 bg-accent rounded-lg mr-3 flex items-center justify-center text-white text-lg">I</span>
+              Income<span className="text-accent">Tracker</span>
+            </h1>
             <button
               onClick={() => setSidebarOpen(false)}
-              className="text-gray-400 hover:text-white"
+              className="text-primary-light hover:text-white transition-colors"
             >
               <XMarkIcon className="h-6 w-6" />
             </button>
           </div>
-          <nav className="flex-1 space-y-1 px-2 py-4">
+          <nav className="flex-1 space-y-2 px-4 py-4">
             {filteredNavigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
                 onClick={() => setSidebarOpen(false)}
-                className={`group flex items-center px-3 py-2 text-sm font-medium rounded-md ${
+                className={`group flex items-center px-4 py-3 text-body font-medium rounded-xl transition-all duration-200 ${
                   isActive(item.href)
-                    ? 'bg-teal-600 text-white'
-                    : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                    ? 'bg-accent text-white shadow-premium'
+                    : 'text-text-muted hover:bg-primary-light hover:text-white'
                 }`}
               >
-                <item.icon className="mr-3 h-6 w-6" />
+                <item.icon className={`mr-3 h-5 w-5 ${isActive(item.href) ? 'text-white' : 'text-text-muted group-hover:text-white'}`} />
                 {item.name}
                 {item.name === 'Notifications' && unreadCount > 0 && (
-                  <span className="ml-auto inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
+                  <span className="ml-auto inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white bg-error rounded-full">
                     {unreadCount}
                   </span>
                 )}
               </Link>
             ))}
           </nav>
-          <div className="border-t border-gray-800 p-4">
+          <div className="border-t border-primary-light/30 p-6 bg-primary-dark/20">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <div className="h-10 w-10 rounded-full bg-teal-600 flex items-center justify-center text-white font-bold">
+                <div className="h-12 w-12 rounded-xl bg-accent flex items-center justify-center text-white font-bold shadow-premium">
                   {user?.firstName?.[0]}{user?.lastName?.[0]}
                 </div>
               </div>
-              <div className="ml-3">
-                <p className="text-sm font-medium text-white">
+              <div className="ml-4 overflow-hidden">
+                <p className="text-body font-semibold text-white truncate">
                   {user?.firstName} {user?.lastName}
                 </p>
-                <p className="text-xs text-gray-400 capitalize">{user?.role}</p>
+                <p className="text-small text-text-muted capitalize truncate">{user?.role}</p>
               </div>
             </div>
             <button
               onClick={handleLogout}
-              className="mt-4 w-full flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-gray-800 rounded-md hover:bg-gray-700"
+              className="mt-6 w-full flex items-center justify-center px-4 py-3 text-body font-semibold text-white bg-primary-light/50 rounded-xl hover:bg-error/80 transition-all duration-300 group"
             >
-              <ArrowRightOnRectangleIcon className="mr-2 h-5 w-5" />
+              <ArrowRightOnRectangleIcon className="mr-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               Logout
             </button>
           </div>
@@ -155,97 +164,112 @@ const DashboardLayout = () => {
       </div>
 
       {/* Desktop sidebar */}
-      <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
-        <div className="flex flex-col flex-grow bg-black overflow-y-auto">
-          <div className="flex items-center flex-shrink-0 px-4 py-4">
-            <h1 className="text-xl font-bold text-white">ExpenseTracker</h1>
+      <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-72 lg:flex-col">
+        <div className="flex flex-col flex-grow bg-primary overflow-y-auto border-r border-border/10 shadow-premium">
+          <div className="flex items-center flex-shrink-0 px-8 py-10">
+            <h1 className="text-2xl font-bold tracking-tight text-white flex items-center">
+              <span className="w-10 h-10 bg-accent rounded-xl mr-4 flex items-center justify-center text-white text-xl shadow-premium">I</span>
+              Income<span className="text-accent">Tracker</span>
+            </h1>
           </div>
-          <nav className="flex-1 space-y-1 px-2 py-4">
+          <nav className="flex-1 space-y-2 px-6 py-4">
             {filteredNavigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
-                className={`group flex items-center px-3 py-2 text-sm font-medium rounded-md ${
+                className={`group flex items-center px-4 py-3 text-body font-medium rounded-xl transition-all duration-200 ${
                   isActive(item.href)
-                    ? 'bg-teal-600 text-white'
-                    : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                    ? 'bg-accent text-white shadow-premium'
+                    : 'text-text-muted hover:bg-primary-light hover:text-white'
                 }`}
               >
-                <item.icon className="mr-3 h-6 w-6" />
+                <item.icon className={`mr-3 h-5 w-5 ${isActive(item.href) ? 'text-white' : 'text-text-muted group-hover:text-white'}`} />
                 {item.name}
                 {item.name === 'Notifications' && unreadCount > 0 && (
-                  <span className="ml-auto inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
+                  <span className="ml-auto inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white bg-error rounded-full">
                     {unreadCount}
                   </span>
                 )}
               </Link>
             ))}
           </nav>
-          <div className="border-t border-gray-800 p-4">
+          <div className="border-t border-primary-light/30 p-8 bg-primary-dark/20">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <div className="h-10 w-10 rounded-full bg-teal-600 flex items-center justify-center text-white font-bold">
+                <div className="h-12 w-12 rounded-xl bg-accent flex items-center justify-center text-white font-bold shadow-premium">
                   {user?.firstName?.[0]}{user?.lastName?.[0]}
                 </div>
               </div>
-              <div className="ml-3">
-                <p className="text-sm font-medium text-white">
+              <div className="ml-4 overflow-hidden">
+                <p className="text-body font-semibold text-white truncate">
                   {user?.firstName} {user?.lastName}
                 </p>
-                <p className="text-xs text-gray-400 capitalize">{user?.role}</p>
+                <p className="text-small text-text-muted capitalize truncate">{user?.role}</p>
               </div>
             </div>
             <button
               onClick={handleLogout}
-              className="mt-4 w-full flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-gray-800 rounded-md hover:bg-gray-700"
+              className="mt-6 w-full flex items-center justify-center px-4 py-3 text-body font-semibold text-white bg-primary-light/50 rounded-xl hover:bg-error/80 transition-all duration-300 group"
             >
-              <ArrowRightOnRectangleIcon className="mr-2 h-5 w-5" />
+              <ArrowRightOnRectangleIcon className="mr-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               Logout
             </button>
           </div>
         </div>
       </div>
 
+
       {/* Main content */}
-      <div className="lg:pl-64 flex flex-col flex-1">
+      <div className="lg:pl-72 flex flex-col flex-1 min-h-screen">
         {/* Top bar */}
-        <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white shadow">
+        <div className="sticky top-0 z-10 flex h-20 flex-shrink-0 bg-surface/80 backdrop-blur-md border-b border-border shadow-premium">
           <button
             type="button"
-            className="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-teal-500 lg:hidden"
+            className="border-r border-border px-6 text-text-secondary hover:text-primary focus:outline-none focus:ring-2 focus:ring-inset focus:ring-accent lg:hidden transition-colors"
             onClick={() => setSidebarOpen(true)}
           >
             <Bars3Icon className="h-6 w-6" />
           </button>
-          <div className="flex flex-1 justify-between px-4">
+          <div className="flex flex-1 justify-between px-8">
             <div className="flex flex-1 items-center">
-              <h2 className="text-2xl font-bold text-gray-900">
-                {filteredNavigation.find((item) => isActive(item.href))?.name || 'Dashboard'}
+              <h2 className="text-h-xl font-bold text-text-primary tracking-tight">
+                {filteredNavigation.find((item) => isActive(item.href))?.name || 'Income Tracker'}
               </h2>
             </div>
-            <div className="ml-4 flex items-center md:ml-6">
+            <div className="ml-4 flex items-center md:ml-6 space-x-4">
               <Link
                 to="/dashboard/notifications"
-                className="relative rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+                className="relative p-2 text-text-secondary hover:text-accent hover:bg-secondary rounded-xl transition-all duration-300"
               >
                 <BellIcon className="h-6 w-6" />
                 {unreadCount > 0 && (
-                  <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-600 ring-2 ring-white"></span>
+                  <span className="absolute top-1 right-1 block h-3 w-3 rounded-full bg-error ring-2 ring-surface animate-pulse"></span>
                 )}
               </Link>
+              <div className="h-8 w-[1px] bg-border mx-2"></div>
+              <div className="flex items-center space-x-3">
+                <div className="hidden md:block text-right">
+                  <p className="text-body font-semibold text-text-primary">{user?.firstName}</p>
+                  <p className="text-small text-text-muted capitalize">{user?.role}</p>
+                </div>
+                <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-white font-bold shadow-premium">
+                  {user?.firstName?.[0]}
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Page content */}
-        <main className="flex-1">
-          <div className="py-6">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+        <main className="flex-1 overflow-y-auto">
+          <div className="py-8">
+            <div className="mx-auto max-w-7xl px-4 sm:px-8 md:px-10">
               <Outlet />
             </div>
           </div>
         </main>
       </div>
+
     </div>
   );
 };

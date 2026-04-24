@@ -17,6 +17,7 @@ const expenseRoutes = require('./routes/expenseRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const currencyRoutes = require('./routes/currencyRoutes');
+const superAdminRoutes = require('./routes/superAdminRoutes');
 const { swaggerUi, specs } = require('./config/swagger');
 
 
@@ -39,6 +40,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/expenses', expenseRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/superadmin', superAdminRoutes);
 app.use('/api/currency', currencyRoutes);
 
 // Swagger API Documentation

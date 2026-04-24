@@ -21,12 +21,15 @@ import SubmitExpense from './pages/employee/SubmitExpense';
 import EditExpense from './pages/employee/EditExpense';
 import ExpenseDetail from './pages/employee/ExpenseDetail';
 import ProtectedRoute from './components/ProtectedRoute';
+import SuperAdminDashboard from './pages/superadmin/SuperAdminDashboard';
 
 // Role-based dashboard component
 const RoleDashboard = () => {
   const { user } = useSelector((state) => state.auth);
   
-  if (user?.role === 'admin') {
+  if (user?.role === 'superadmin') {
+    return <SuperAdminDashboard />;
+  } else if (user?.role === 'admin') {
     return <AdminDashboard />;
   } else if (user?.role === 'manager') {
     return <ManagerDashboard />;
