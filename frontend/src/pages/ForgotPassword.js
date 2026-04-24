@@ -38,7 +38,7 @@ const ForgotPassword = () => {
                   d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
               </svg>
             </div>
-            <span className="text-3xl font-black tracking-tighter uppercase italic">Income Tracker</span>
+            <span className="text-3xl font-black tracking-tighter uppercase italic">InTrack</span>
           </div>
 
           <h1 className="text-7xl font-black leading-[1.05] tracking-tight mb-10">

@@ -98,7 +98,7 @@ exports.verifySignupOTP = async (req, res) => {
       email,
       otp,
       otpExpires: { $gt: Date.now() },
-    });
+    }).populate('company');
 
     if (!user) {
       return res.status(400).json({
@@ -135,7 +135,7 @@ exports.login = async (req, res) => {
     }
 
     // Check if user exists && password is correct
-    const user = await User.findOne({ email }).select('+password');
+    const user = await User.findOne({ email }).select('+password').populate('company');
 
     if (!user || !(await user.correctPassword(password, user.password))) {
       return res.status(401).json({
@@ -200,7 +200,7 @@ exports.protect = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // 3) Check if user still exists
-    const currentUser = await User.findById(decoded.id);
+    const currentUser = await User.findById(decoded.id).populate('company');
     if (!currentUser) {
       return res.status(401).json({
         status: 'fail',

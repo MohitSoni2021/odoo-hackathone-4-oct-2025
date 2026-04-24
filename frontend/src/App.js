@@ -24,6 +24,7 @@ import EditExpense from './pages/employee/EditExpense';
 import ExpenseDetail from './pages/employee/ExpenseDetail';
 import ProtectedRoute from './components/ProtectedRoute';
 import SuperAdminDashboard from './pages/superadmin/SuperAdminDashboard';
+import Profile from './pages/Profile';
 
 // Role-based dashboard component
 const RoleDashboard = () => {
@@ -176,6 +177,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="profile" element={<Profile />} />
             
             {/* Shared routes */}
             <Route path="analytics" element={<div className="text-center py-12 text-gray-500">Analytics page coming soon...</div>} />

@@ -97,7 +97,7 @@ const DashboardLayout = () => {
           <div className="flex items-center justify-between px-8 py-10">
             <h1 className="text-2xl font-black tracking-tighter text-white italic uppercase flex items-center">
               <span className="w-10 h-10 bg-accent rounded-xl mr-3 flex items-center justify-center text-white text-xl shadow-massive">I</span>
-              Income<span className="text-accent ml-1">Tracker</span>
+              In<span className="text-accent ml-1">Track</span>
             </h1>
             <button onClick={() => setSidebarOpen(false)} className="text-slate-400 hover:text-white transition-colors p-2 bg-slate-800 rounded-xl">
               <XMarkIcon className="h-6 w-6" />
@@ -124,15 +124,15 @@ const DashboardLayout = () => {
             ))}
           </nav>
           <div className="p-8 border-t border-white/5 bg-slate-950/50">
-            <div className="flex items-center mb-8">
-              <div className="h-14 w-14 rounded-xl bg-accent flex items-center justify-center text-white font-black text-lg shadow-massive italic">
+            <Link to="/dashboard/profile" onClick={() => setSidebarOpen(false)} className="flex items-center mb-8 group cursor-pointer">
+              <div className="h-14 w-14 rounded-xl bg-accent flex items-center justify-center text-white font-black text-lg shadow-massive italic group-hover:scale-110 transition-transform">
                 {user?.firstName?.[0]}{user?.lastName?.[0]}
               </div>
               <div className="ml-5 overflow-hidden">
-                <p className="text-sm font-black text-white uppercase tracking-tight italic truncate">{user?.firstName} {user?.lastName}</p>
-                <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] mt-1 opacity-60 truncate">{user?.role} NODE</p>
+                <p className="text-sm font-black text-white uppercase tracking-tight italic truncate group-hover:text-accent transition-colors">{user?.firstName} {user?.lastName}</p>
+                <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] mt-1 opacity-60 truncate group-hover:opacity-100 transition-opacity">{user?.role} NODE</p>
               </div>
-            </div>
+            </Link>
             <button onClick={handleLogout} className="w-full flex items-center justify-center px-6 py-4 text-xs font-black uppercase tracking-widest text-white bg-error/20 border border-error/30 rounded-xl hover:bg-error hover:border-error transition-all duration-500 group">
 
               <ArrowRightOnRectangleIcon className="mr-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -162,7 +162,7 @@ const DashboardLayout = () => {
               <div className="flex-shrink-0 w-12 h-12 bg-accent rounded-xl flex items-center justify-center text-white text-2xl font-black shadow-massive italic transform hover:rotate-12 transition-transform">I</div>
               {!isCollapsed && (
                 <h1 className="ml-5 text-2xl font-black tracking-tighter text-white whitespace-nowrap italic uppercase animate-in slide-in-from-left duration-500">
-                  Income<span className="text-accent ml-1">Tracker</span>
+                  In<span className="text-accent ml-1">Track</span>
                 </h1>
               )}
             </div>
@@ -193,17 +193,17 @@ const DashboardLayout = () => {
           </nav>
 
           <div className={`border-t border-white/5 bg-slate-950/30 transition-all duration-500 ${isCollapsed ? 'p-6' : 'p-10'}`}>
-            <div className="flex items-center">
-              <div className="flex-shrink-0 h-14 w-14 rounded-xl bg-accent flex items-center justify-center text-white font-black shadow-massive italic text-lg transform hover:scale-110 transition-transform cursor-pointer">
+            <Link to="/dashboard/profile" className="flex items-center group cursor-pointer">
+              <div className="flex-shrink-0 h-14 w-14 rounded-xl bg-accent flex items-center justify-center text-white font-black shadow-massive italic text-lg transform group-hover:scale-110 transition-transform">
                 {user?.firstName?.[0]}{user?.lastName?.[0]}
               </div>
               {!isCollapsed && (
                 <div className="ml-5 overflow-hidden animate-in slide-in-from-left duration-500">
-                  <p className="text-sm font-black text-white uppercase tracking-tight italic truncate">{user?.firstName} {user?.lastName}</p>
-                  <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] mt-1 opacity-50 truncate">{user?.role} ACCESS</p>
+                  <p className="text-sm font-black text-white uppercase tracking-tight italic truncate group-hover:text-accent transition-colors">{user?.firstName} {user?.lastName}</p>
+                  <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] mt-1 opacity-50 truncate group-hover:opacity-100 transition-opacity">{user?.role} ACCESS</p>
                 </div>
               )}
-            </div>
+            </Link>
             <button 
               onClick={handleLogout} 
               className={`mt-10 flex items-center justify-center text-[10px] font-black uppercase tracking-widest text-white bg-white/5 border border-white/10 rounded-xl hover:bg-error hover:border-error transition-all duration-500 group ${isCollapsed ? 'w-14 h-14' : 'w-full py-5 px-4'}`}
@@ -254,15 +254,15 @@ const DashboardLayout = () => {
               
               <div className="h-10 w-[1px] bg-slate-200 mx-2"></div>
               
-              <div className="flex items-center space-x-5 group cursor-pointer">
+              <Link to="/dashboard/profile" className="flex items-center space-x-5 group cursor-pointer">
                 <div className="hidden md:block text-right">
                   <p className="text-sm font-black text-slate-900 uppercase tracking-tight italic group-hover:text-accent transition-colors">{user?.firstName} {user?.lastName}</p>
-                  <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] mt-0.5 opacity-60">Verified Node</p>
+                  <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] mt-0.5 opacity-60 group-hover:opacity-100 transition-opacity">Verified Node</p>
                 </div>
                 <div className="h-12 w-12 rounded-xl bg-slate-900 flex items-center justify-center text-white font-black shadow-massive transform group-hover:rotate-12 transition-transform border-2 border-transparent group-hover:border-accent">
                   {user?.firstName?.[0]}
                 </div>
-              </div>
+              </Link>
             </div>
           </div>
         </div>

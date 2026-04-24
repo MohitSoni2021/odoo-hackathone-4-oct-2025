@@ -88,13 +88,13 @@ const baseTemplate = (content) => `
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">SwasthyaSaathi</div>
+            <div class="logo">InTrack</div>
         </div>
         <div class="content">
             ${content}
         </div>
         <div class="footer">
-            &copy; ${new Date().getFullYear()} SwasthyaSaathi. All rights reserved.
+            &copy; ${new Date().getFullYear()} InTrack. All rights reserved.
         </div>
     </div>
 </body>
@@ -106,19 +106,19 @@ exports.sendVerificationEmail = async (user, otp) => {
   
   const content = `
     <h1>Verify Your Account</h1>
-    <p>Welcome to SwasthyaSaathi, ${user.firstName}! Please use the following code to verify your account:</p>
+    <p>Welcome to InTrack, ${user.firstName}! Please use the following code to verify your account:</p>
     <div class="otp-container">
         <div class="otp-code">${otp}</div>
     </div>
     <p>This code is valid for 10 minutes.</p>
     <p>If you didn't create an account, please ignore this email.</p>
-    <p style="margin-top: 32px;">Best regards,<br>The SwasthyaSaathi Team</p>
+    <p style="margin-top: 32px;">Best regards,<br>The InTrack Team</p>
   `;
 
   await transporter.sendMail({
-    from: `"SwasthyaSaathi" <${process.env.EMAIL_FROM}>`,
+    from: `"InTrack" <${process.env.EMAIL_FROM}>`,
     to: user.email,
-    subject: 'Verify your SwasthyaSaathi account',
+    subject: 'Verify your InTrack account',
     html: baseTemplate(content),
   });
 };
@@ -134,11 +134,11 @@ exports.sendPasswordResetOTP = async (user, otp) => {
     </div>
     <p>This code is valid for only 10 minutes.</p>
     <p>If you didn't request this, please ignore this email.</p>
-    <p style="margin-top: 32px;">Best regards,<br>The SwasthyaSaathi Team</p>
+    <p style="margin-top: 32px;">Best regards,<br>The InTrack Team</p>
   `;
 
   await transporter.sendMail({
-    from: `"SwasthyaSaathi" <${process.env.EMAIL_FROM}>`,
+    from: `"InTrack" <${process.env.EMAIL_FROM}>`,
     to: user.email,
     subject: 'Your Password Reset Code',
     html: baseTemplate(content),
