@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { createUser, fetchUsers } from '../../store/slices/userSlice';
 import { toast } from 'react-toastify';
-import { ArrowLeftIcon, UserPlusIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, UserPlusIcon, IdentificationIcon, EnvelopeIcon, KeyIcon, ShieldCheckIcon, GlobeAltIcon, UserIcon } from '@heroicons/react/24/outline';
 
 const countries = [
-  'United States', 'United Kingdom', 'Canada', 'Australia', 'India', 'Japan', 'Germany', 'France', 'Italy', 'Spain', 'Brazil', 'Mexico', 'China' ];
+  'United States', 'United Kingdom', 'Canada', 'Australia', 'India', 'Japan', 'Germany', 'France', 'Italy', 'Spain', 'Brazil', 'Mexico', 'China' 
+];
 
 const CreateUser = () => {
   const dispatch = useDispatch();
@@ -76,146 +77,157 @@ const CreateUser = () => {
   const managers = users.filter((u) => u.role === 'manager');
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => navigate('/dashboard/users')}
-              className="flex items-center text-sm text-gray-600 hover:text-gray-900"
-            >
-              <ArrowLeftIcon className="h-5 w-5 mr-2" />
-              Back to Users
-            </button>
+    <div className="animate-in fade-in duration-700">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-6">
+        <div className="flex items-center gap-6">
+          <div className="p-4 bg-primary rounded-2xl shadow-premium">
+            <UserPlusIcon className="h-8 w-8 text-white" />
           </div>
-          <div className="mt-6 flex items-center gap-4">
-            <div className="p-3 bg-teal-600 rounded-xl">
-              <UserPlusIcon className="h-8 w-8 text-white" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Create New User</h1>
-              <p className="text-sm text-gray-500">Add a new member to your organization</p>
-            </div>
+          <div>
+            <h1 className="text-h-xl font-bold text-text-primary tracking-tight">Onboard New Talent</h1>
+            <p className="text-body text-text-muted opacity-80">Create a professional profile and assign system permissions.</p>
           </div>
+        </div>
+
+        <div>
+          <button
+            onClick={() => navigate('/dashboard/users')}
+            className="group inline-flex items-center px-6 py-3 bg-secondary text-text-primary font-bold rounded-2xl hover:bg-border transition-all active:scale-95"
+          >
+            <ArrowLeftIcon className="h-5 w-5 mr-2 group-hover:-translate-x-1 transition-transform" />
+            Back to Directory
+          </button>
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-          <form onSubmit={handleSubmit} className="p-8 space-y-8">
-            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
-              {/* First & Last Name */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  First Name <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
-                  placeholder="John"
-                />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        {/* Left Column: Form Card */}
+        <div className="lg:col-span-2">
+          <div className="bg-surface rounded-[2.5rem] border border-border shadow-premium overflow-hidden">
+            <div className="px-10 py-8 bg-secondary/30 border-b border-border">
+              <h3 className="text-h-m font-bold text-text-primary tracking-tight flex items-center gap-2">
+                <IdentificationIcon className="h-6 w-6 text-accent" /> Personnel Credentials
+              </h3>
+            </div>
+            
+            <form onSubmit={handleSubmit} className="p-10 space-y-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                {/* First Name */}
+                <div className="space-y-2">
+                  <label className="text-small font-bold text-text-secondary ml-1 flex items-center gap-2">
+                    First Name <span className="text-error">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium"
+                    placeholder="e.g. Michael"
+                  />
+                </div>
+
+                {/* Last Name */}
+                <div className="space-y-2">
+                  <label className="text-small font-bold text-text-secondary ml-1 flex items-center gap-2">
+                    Last Name <span className="text-error">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium"
+                    placeholder="e.g. Scott"
+                  />
+                </div>
+
+                {/* Email */}
+                <div className="space-y-2">
+                  <label className="text-small font-bold text-text-secondary ml-1 flex items-center gap-2">
+                    <EnvelopeIcon className="h-4 w-4 text-accent" /> Email Address <span className="text-error">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium"
+                    placeholder="michael.scott@dundermifflin.com"
+                  />
+                </div>
+
+                {/* Password */}
+                <div className="space-y-2">
+                  <label className="text-small font-bold text-text-secondary ml-1 flex items-center gap-2">
+                    <KeyIcon className="h-4 w-4 text-accent" /> Initial Password <span className="text-error">*</span>
+                  </label>
+                  <input
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium"
+                    placeholder="••••••••"
+                  />
+                  <p className="text-[10px] text-text-muted/60 ml-1 font-medium italic">Min. 8 chars</p>
+                </div>
+
+                {/* Role */}
+                <div className="space-y-2">
+                  <label className="text-small font-bold text-text-secondary ml-1 flex items-center gap-2">
+                    <ShieldCheckIcon className="h-4 w-4 text-accent" /> Access Level <span className="text-error">*</span>
+                  </label>
+                  <select
+                    name="role"
+                    value={formData.role}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium appearance-none cursor-pointer"
+                  >
+                    <option value="employee">Employee (Basic Access)</option>
+                    <option value="manager">Manager (Team Approval)</option>
+                    <option value="admin">Administrator (Full Access)</option>
+                  </select>
+                </div>
+
+                {/* Country */}
+                <div className="space-y-2">
+                  <label className="text-small font-bold text-text-secondary ml-1 flex items-center gap-2">
+                    <GlobeAltIcon className="h-4 w-4 text-accent" /> Regional Office <span className="text-error">*</span>
+                  </label>
+                  <select
+                    name="country"
+                    value={formData.country}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium appearance-none cursor-pointer"
+                  >
+                    {countries.map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Last Name <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
-                  placeholder="Doe"
-                />
-              </div>
-
-              {/* Email */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email Address <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
-                  placeholder="john.doe@company.com"
-                />
-              </div>
-
-              {/* Password */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Password <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
-                  placeholder="••••••••"
-                />
-                <p className="mt-mt-1 text-xs text-gray-500">Minimum 8 characters</p>
-              </div>
-
-              {/* Role */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Role <span className="text-red-500">*</span>
-                </label>
-                <select
-                  name="role"
-                  value={formData.role}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
-                >
-                  <option value="employee">Employee</option>
-                  <option value="manager">Manager</option>
-                  <option value="admin">Admin</option>
-                </select>
-              </div>
-
-              {/* Country */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Country <span className="text-red-500">*</span>
-                </label>
-                <select
-                  name="country"
-                  value={formData.country}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
-                >
-                  {countries.map((c) => (
-                    <option key={c} value={c}>{c}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Manager – Only for Employees */}
+              {/* Manager Selection */}
               {formData.role === 'employee' && (
-                <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Manager (Optional)
+                <div className="space-y-2 animate-in slide-in-from-top duration-300">
+                  <label className="text-small font-bold text-text-secondary ml-1 flex items-center gap-2">
+                    <UserIcon className="h-4 w-4 text-accent" /> Reporting To
                   </label>
                   <select
                     name="manager"
                     value={formData.manager}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
+                    className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium appearance-none cursor-pointer"
                   >
-                    <option value="">No manager</option>
+                    <option value="">No Manager Assigned</option>
                     {managers.map((m) => (
                       <option key={m._id} value={m._id}>
                         {m.firstName} {m.lastName} ({m.email})
@@ -226,49 +238,85 @@ const CreateUser = () => {
               )}
 
               {/* Active Toggle */}
-              <div className="sm:col-span-2">
-                <label className="flex items-center space-x-3 cursor-pointer">
+              <div className="flex items-center justify-between p-6 bg-secondary/30 rounded-3xl border border-border">
+                <div>
+                  <h4 className="text-body font-bold text-text-primary">Instant Activation</h4>
+                  <p className="text-small text-text-muted">Allow user to sign in immediately after creation.</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
                     name="isActive"
                     checked={formData.isActive}
                     onChange={handleChange}
-                    className="h-5 w-5 w-5 text-teal-600 rounded border-gray-300 focus:ring-teal-500"
+                    className="sr-only peer"
                   />
-                  <span className="text-sm font-medium text-gray-700">User is active</span>
+                  <div className="w-14 h-8 bg-text-muted/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-success shadow-inner"></div>
                 </label>
               </div>
-            </div>
 
-            {/* Action Buttons */}
-            <div className="flex justify-end gap-4 pt-6 border-t border-gray-200">
-              <button
-                type="button"
-                onClick={() => navigate('/dashboard/users')}
-                disabled={loading}
-                className="px-6 py-3 border border-gray-300 rounded-lg font-medium text-gray-700 bg-white hover:bg-gray-50 transition"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={loading}
-                className="px-8 py-3 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 focus:outline-none focus:ring-4 focus:ring-teal-200 disabled:opacity-60 disabled:cursor-not-allowed transition flex items-center gap-2"
-              >
-                {loading ? (
-                  <>
-                    <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
-                    </svg>
-                    Creating...
-                  </>
-                ) : (
-                  'Create User'
-                )}
-              </button>
+              {/* Action Buttons */}
+              <div className="flex justify-end gap-4 pt-8 border-t border-border">
+                <button
+                  type="button"
+                  onClick={() => navigate('/dashboard/users')}
+                  disabled={loading}
+                  className="px-8 py-4 text-body font-bold text-text-muted bg-secondary hover:bg-border rounded-2xl transition-all active:scale-95"
+                >
+                  Discard
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="px-10 py-4 text-body font-bold text-white bg-accent hover:bg-accent-dark rounded-2xl shadow-premium transition-all active:scale-95 disabled:opacity-50 flex items-center gap-3"
+                >
+                  {loading ? (
+                    <>
+                      <div className="animate-spin h-5 w-5 border-2 border-white/20 border-t-white rounded-full"></div>
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <UserPlusIcon className="h-5 w-5" />
+                      Create Account
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        {/* Right Column: Information/Guide */}
+        <div className="space-y-8">
+          <div className="bg-primary p-8 rounded-[2.5rem] shadow-premium text-white relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-10 opacity-10 group-hover:scale-125 transition-transform">
+              <ShieldCheckIcon className="h-32 w-32" />
             </div>
-          </form>
+            <h3 className="text-h-m font-bold mb-4 relative z-10">Security First</h3>
+            <p className="text-body opacity-90 relative z-10 leading-relaxed">
+              Ensure you assign the correct role. Admins can view financial data and delete records. Managers can only approve team expenses.
+            </p>
+          </div>
+
+          <div className="bg-surface p-8 rounded-[2.5rem] border border-border shadow-premium">
+            <h3 className="text-h-s font-bold text-text-primary mb-6">Onboarding Checklist</h3>
+            <ul className="space-y-4">
+              {[
+                'Verified corporate email address',
+                'Correct departmental regional office',
+                'Reporting manager assigned (if Employee)',
+                'Initial password meets security policy'
+              ].map((item, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <div className="mt-1 p-1 bg-success/20 rounded-full text-success">
+                    <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" /></svg>
+                  </div>
+                  <span className="text-small text-text-secondary font-medium">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </div>

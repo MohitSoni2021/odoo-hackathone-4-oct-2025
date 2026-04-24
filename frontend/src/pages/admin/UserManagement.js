@@ -10,6 +10,9 @@ import {
   MagnifyingGlassIcon,
   FunnelIcon,
   UserIcon,
+  UserGroupIcon,
+  ShieldCheckIcon,
+  XMarkIcon,
 } from '@heroicons/react/24/outline';
 import UserModal from '../../components/modals/UserModal';
 
@@ -65,181 +68,205 @@ const UserManagement = () => {
 
   const getRoleStyle = (role) => {
     switch (role) {
-      case 'admin':    return 'bg-red-100 text-red-700';
-      case 'manager':  return 'bg-blue-100 text-blue-700';
-      case 'employee': return 'bg-emerald-100 text-emerald-700';
-      default:         return 'bg-gray-100 text-gray-700';
+      case 'admin':    return 'bg-error/10 text-error border-error/20';
+      case 'manager':  return 'bg-info/10 text-info border-info/20';
+      case 'employee': return 'bg-success/10 text-success border-success/20';
+      default:         return 'bg-secondary text-text-muted border-border';
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="w-9 h-9 bg-teal-600 rounded-lg flex items-center justify-center">
-                <UserIcon className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">User Management</h1>
-                <p className="text-sm text-gray-500">Manage all users in your organization</p>
-              </div>
-            </div>
+    <div className="animate-in fade-in duration-700">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-6">
+        <div className="flex items-center gap-6">
+          <div className="p-4 bg-primary rounded-2xl shadow-premium">
+            <UserGroupIcon className="h-8 w-8 text-white" />
+          </div>
+          <div>
+            <h1 className="text-h-xl font-bold text-text-primary tracking-tight">User Management</h1>
+            <p className="text-body text-text-muted opacity-80">Directory of all organization personnel and access levels.</p>
+          </div>
+        </div>
 
-            <div className="flex space-x-3">
-              <button
-                onClick={handleCreateUser}
-                className="inline-flex items-center px-4 py-2.5 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition shadow-sm"
-              >
-                <PlusIcon className="h-5 w-5 mr-2" />
-                Add User (Modal)
-              </button>
-              <button
-                onClick={() => navigate('/dashboard/users/new')}
-                className="inline-flex items-center px-4 py-2.5 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition shadow-sm"
-              >
-                <PlusIcon className="h-5 w-5 mr-2" />
-                Add User (Page)
-              </button>
-            </div>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={handleCreateUser}
+            className="group inline-flex items-center px-6 py-3.5 bg-accent text-white font-bold rounded-2xl hover:bg-accent-dark transition-all shadow-premium active:scale-95"
+          >
+            <PlusIcon className="h-5 w-5 mr-2 group-hover:rotate-90 transition-transform" />
+            New User
+          </button>
+        </div>
+      </div>
+
+      {/* Stats Quick View */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+        <div className="bg-surface p-6 rounded-3xl border border-border shadow-premium flex items-center gap-4">
+          <div className="p-3 bg-primary/10 rounded-xl text-primary"><UserGroupIcon className="h-6 w-6" /></div>
+          <div>
+            <div className="text-small font-bold text-text-muted uppercase">Total Users</div>
+            <div className="text-2xl font-bold text-text-primary">{users.length}</div>
+          </div>
+        </div>
+        <div className="bg-surface p-6 rounded-3xl border border-border shadow-premium flex items-center gap-4">
+          <div className="p-3 bg-success/10 rounded-xl text-success"><ShieldCheckIcon className="h-6 w-6" /></div>
+          <div>
+            <div className="text-small font-bold text-text-muted uppercase">Active</div>
+            <div className="text-2xl font-bold text-text-primary">{users.filter(u => u.isActive).length}</div>
+          </div>
+        </div>
+        <div className="bg-surface p-6 rounded-3xl border border-border shadow-premium flex items-center gap-4">
+          <div className="p-3 bg-info/10 rounded-xl text-info"><UserIcon className="h-6 w-6" /></div>
+          <div>
+            <div className="text-small font-bold text-text-muted uppercase">Managers</div>
+            <div className="text-2xl font-bold text-text-primary">{users.filter(u => u.role === 'manager').length}</div>
+          </div>
+        </div>
+        <div className="bg-surface p-6 rounded-3xl border border-border shadow-premium flex items-center gap-4">
+          <div className="p-3 bg-error/10 rounded-xl text-error"><XMarkIcon className="h-6 w-6" /></div>
+          <div>
+            <div className="text-small font-bold text-text-muted uppercase">Inactive</div>
+            <div className="text-2xl font-bold text-text-primary">{users.filter(u => !u.isActive).length}</div>
           </div>
         </div>
       </div>
 
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
-        {/* Filters */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {/* Search */}
-            <div className="relative">
-              <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search by name or email..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
-              />
-            </div>
+      {/* Filters Card */}
+      <div className="bg-surface rounded-3xl border border-border shadow-premium p-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Search */}
+          <div className="relative group">
+            <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted group-focus-within:text-accent transition-colors" />
+            <input
+              type="text"
+              placeholder="Search by name or email..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-12 pr-4 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all placeholder:text-text-muted/60 font-medium"
+            />
+          </div>
 
-            {/* Role Filter */}
-            <div className="relative">
-              <FunnelIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-              <select
-                value={roleFilter}
-                onChange={(e) => setRoleFilter(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
-              >
-                <option value="all">All Roles</option>
-                <option value="admin">Admin</option>
-                <option value="manager">Manager</option>
-                <option value="employee">Employee</option>
-              </select>
-            </div>
+          {/* Role Filter */}
+          <div className="relative group">
+            <FunnelIcon className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted group-focus-within:text-accent transition-colors" />
+            <select
+              value={roleFilter}
+              onChange={(e) => setRoleFilter(e.target.value)}
+              className="w-full pl-12 pr-4 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all appearance-none font-medium cursor-pointer"
+            >
+              <option value="all">All Roles</option>
+              <option value="admin">Admin</option>
+              <option value="manager">Manager</option>
+              <option value="employee">Employee</option>
+            </select>
+          </div>
 
-            {/* Status Filter */}
-            <div className="relative">
-              <FunnelIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
-              >
-                <option value="all">All Status</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-              </select>
-            </div>
+          {/* Status Filter */}
+          <div className="relative group">
+            <FunnelIcon className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted group-focus-within:text-accent transition-colors" />
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="w-full pl-12 pr-4 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all appearance-none font-medium cursor-pointer"
+            >
+              <option value="all">All Status</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
           </div>
         </div>
+      </div>
 
-        {/* Users Table */}
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-          {loading ? (
-            <div className="p-16 text-center">
-              <div className="inline-block animate-spin rounded-full h-10 w-10 border-4 border-gray-200 border-t-teal-600"></div>
-              <p className="mt-4 text-gray-500">Loading users...</p>
+      {/* Users Table Card */}
+      <div className="bg-surface rounded-[2rem] border border-border shadow-premium overflow-hidden">
+        {loading ? (
+          <div className="p-20 text-center">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-secondary border-t-accent"></div>
+            <p className="mt-6 text-text-muted font-medium">Refreshing directory...</p>
+          </div>
+        ) : filteredUsers.length === 0 ? (
+          <div className="p-20 text-center">
+            <div className="w-20 h-20 bg-secondary rounded-3xl flex items-center justify-center mx-auto mb-6">
+              <UserIcon className="h-10 w-10 text-text-muted/40" />
             </div>
-          ) : filteredUsers.length === 0 ? (
-            <div className="p-16 text-center text-gray-500">
-              <UserIcon className="h-12 w-12 mx-auto text-gray-300 mb-4" />
-              <p className="text-lg font-medium text-gray-900">No users found</p>
-              <p className="mt-2">Try adjusting your filters or search term.</p>
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50 border-b border-gray-200">
-                  <tr>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Country</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Manager</th>
-                    <th className="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {filteredUsers.map((user) => (
-                    <tr key={user._id} className="hover:bg-gray-50 transition">
-                      <td className="px-6 py-5">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-teal-600 rounded-xl flex items-center justify-center text-white font-bold text-sm">
-                            {user.firstName?.[0]}{user.lastName?.[0]}
-                          </div>
-                          <div>
-                            <div className="font-medium text-gray-900">
-                              {user.firstName} {user.lastName}
-                            </div>
-                            <div className="text-sm text-gray-500">{user.email}</div>
-                          </div>
+            <p className="text-xl font-bold text-text-primary mb-2">No users found</p>
+            <p className="text-text-muted">Adjust your search parameters and try again.</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="bg-secondary/30 border-b border-border">
+                  <th className="px-8 py-6 text-left text-xs font-bold text-text-muted uppercase tracking-widest">User Details</th>
+                  <th className="px-8 py-6 text-left text-xs font-bold text-text-muted uppercase tracking-widest">Access Role</th>
+                  <th className="px-8 py-6 text-left text-xs font-bold text-text-muted uppercase tracking-widest">Location</th>
+                  <th className="px-8 py-6 text-left text-xs font-bold text-text-muted uppercase tracking-widest">Status</th>
+                  <th className="px-8 py-6 text-left text-xs font-bold text-text-muted uppercase tracking-widest">Reports To</th>
+                  <th className="px-8 py-6 text-right text-xs font-bold text-text-muted uppercase tracking-widest">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {filteredUsers.map((user) => (
+                  <tr key={user._id} className="hover:bg-secondary/20 transition-colors group">
+                    <td className="px-8 py-6">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-sm group-hover:scale-110 transition-transform">
+                          {user.firstName?.[0]}{user.lastName?.[0]}
                         </div>
-                      </td>
-                      <td className="px-6 py-5">
-                        <span className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold ${getRoleStyle(user.role)}`}>
-                          {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
-                        </span>
-                      </td>
-                      <td className="px-6 py-5 text-sm text-gray-600">
-                        {user.country || '-'}
-                      </td>
-                      <td className="px-6 py-5">
-                        <span className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold ${
-                          user.isActive ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-600'
-                        }`}>
+                        <div>
+                          <div className="font-bold text-text-primary">
+                            {user.firstName} {user.lastName}
+                          </div>
+                          <div className="text-small text-text-muted">{user.email}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-8 py-6">
+                      <span className={`inline-flex px-3 py-1 rounded-lg text-xs font-bold border ${getRoleStyle(user.role)}`}>
+                        {user.role.toUpperCase()}
+                      </span>
+                    </td>
+                    <td className="px-8 py-6 text-body font-medium text-text-secondary">
+                      {user.country || '-'}
+                    </td>
+                    <td className="px-8 py-6">
+                      <div className="flex items-center gap-2">
+                        <div className={`w-2 h-2 rounded-full ${user.isActive ? 'bg-success animate-pulse' : 'bg-text-muted/30'}`}></div>
+                        <span className={`text-small font-bold ${user.isActive ? 'text-success' : 'text-text-muted'}`}>
                           {user.isActive ? 'Active' : 'Inactive'}
                         </span>
-                      </td>
-                      <td className="px-6 py-5 text-sm text-gray-600">
-                        {user.manager
-                          ? `${user.manager.firstName} ${user.manager.lastName}`
-                          : '-'}
-                      </td>
-                      <td className="px-6 py-5 text-right space-x-4">
+                      </div>
+                    </td>
+                    <td className="px-8 py-6 text-body font-medium text-text-secondary">
+                      {user.manager
+                        ? `${user.manager.firstName} ${user.manager.lastName}`
+                        : <span className="text-text-muted opacity-50 italic">None</span>}
+                    </td>
+                    <td className="px-8 py-6 text-right">
+                      <div className="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button
                           onClick={() => handleEditUser(user)}
-                          className="text-teal-600 hover:text-teal-800"
+                          className="p-2 text-info hover:bg-info/10 rounded-lg transition-colors"
                           title="Edit user"
                         >
                           <PencilIcon className="h-5 w-5" />
                         </button>
                         <button
                           onClick={() => handleDeleteUser(user._id)}
-                          className="text-red-600 hover:text-red-800"
+                          className="p-2 text-error hover:bg-error/10 rounded-lg transition-colors"
                           title="Delete user"
                         >
                           <TrashIcon className="h-5 w-5" />
                         </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
       {/* Modal */}

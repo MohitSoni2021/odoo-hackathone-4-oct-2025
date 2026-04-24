@@ -2,22 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createUser, updateUser, fetchUsers } from '../../store/slices/userSlice';
 import { toast } from 'react-toastify';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon, UserIcon, EnvelopeIcon, KeyIcon, GlobeAltIcon, UserPlusIcon, IdentificationIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
 
 const countries = [
-  'United States',
-  'United Kingdom',
-  'Canada',
-  'Australia',
-  'India',
-  'Japan',
-  'Germany',
-  'France',
-  'Italy',
-  'Spain',
-  'Brazil',
-  'Mexico',
-  'China',
+  'United States', 'United Kingdom', 'Canada', 'Australia', 'India', 'Japan',
+  'Germany', 'France', 'Italy', 'Spain', 'Brazil', 'Mexico', 'China',
 ];
 
 const UserModal = ({ isOpen, onClose }) => {
@@ -49,14 +38,8 @@ const UserModal = ({ isOpen, onClose }) => {
       });
     } else {
       setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-        role: 'employee',
-        country: 'United States',
-        manager: '',
-        isActive: true,
+        firstName: '', lastName: '', email: '', password: '',
+        role: 'employee', country: 'United States', manager: '', isActive: true,
       });
     }
   }, [selectedUser]);
@@ -74,7 +57,6 @@ const UserModal = ({ isOpen, onClose }) => {
     setLoading(true);
 
     try {
-      // Validation
       if (!formData.firstName || !formData.lastName || !formData.email) {
         toast.error('Please fill in all required fields');
         setLoading(false);
@@ -87,13 +69,6 @@ const UserModal = ({ isOpen, onClose }) => {
         return;
       }
 
-      if (formData.password && formData.password.length < 8) {
-        toast.error('Password must be at least 8 characters');
-        setLoading(false);
-        return;
-      }
-
-      // Prepare data
       const userData = {
         firstName: formData.firstName,
         lastName: formData.lastName,
@@ -103,27 +78,17 @@ const UserModal = ({ isOpen, onClose }) => {
         isActive: formData.isActive,
       };
 
-      // Add password only if provided
-      if (formData.password) {
-        userData.password = formData.password;
-      }
-
-      // Add manager only if role is employee and manager is selected
-      if (formData.role === 'employee' && formData.manager) {
-        userData.manager = formData.manager;
-      }
+      if (formData.password) userData.password = formData.password;
+      if (formData.role === 'employee' && formData.manager) userData.manager = formData.manager;
 
       if (selectedUser) {
-        // Update user
         await dispatch(updateUser({ id: selectedUser._id, userData })).unwrap();
         toast.success('User updated successfully');
       } else {
-        // Create user
         await dispatch(createUser(userData)).unwrap();
         toast.success('User created successfully');
       }
 
-      // Refresh users list
       dispatch(fetchUsers());
       onClose();
     } catch (error) {
@@ -138,222 +103,205 @@ const UserModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-        {/* Background overlay */}
-        <div
-          className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
-          onClick={onClose}
-        ></div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-in fade-in duration-300">
+      {/* Premium Backdrop Blur */}
+      <div 
+        className="fixed inset-0 bg-primary/40 backdrop-blur-md transition-opacity" 
+        onClick={onClose}
+      ></div>
 
-        {/* Modal panel */}
-        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-          <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium text-gray-900">
-                {selectedUser ? 'Edit User' : 'Create New User'}
+      {/* Modal Container */}
+      <div className="relative bg-surface w-full max-w-xl rounded-[2.5rem] shadow-premium-lg overflow-hidden animate-in zoom-in duration-300 border border-border">
+        {/* Header */}
+        <div className="px-10 py-8 bg-secondary/30 border-b border-border flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-accent rounded-xl shadow-premium">
+              <UserPlusIcon className="h-6 w-6 text-white" />
+            </div>
+            <div>
+              <h3 className="text-h-m font-bold text-text-primary tracking-tight">
+                {selectedUser ? 'Edit Personnel' : 'Onboard New User'}
               </h3>
-              <button
-                onClick={onClose}
-                className="text-gray-400 hover:text-gray-500"
-              >
-                <XMarkIcon className="h-6 w-6" />
-              </button>
+              <p className="text-small text-text-muted">Configure profile and access levels.</p>
+            </div>
+          </div>
+          <button 
+            onClick={onClose} 
+            className="p-2 text-text-muted hover:text-error hover:bg-error/10 rounded-xl transition-all"
+          >
+            <XMarkIcon className="h-6 w-6" />
+          </button>
+        </div>
+
+        {/* Form Body */}
+        <form onSubmit={handleSubmit} className="p-10 space-y-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {/* First Name */}
+            <div className="space-y-2">
+              <label className="text-small font-bold text-text-secondary ml-1 flex items-center gap-2">
+                <IdentificationIcon className="h-4 w-4 text-accent" /> First Name
+              </label>
+              <input
+                type="text"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                required
+                className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium"
+                placeholder="John"
+              />
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {/* First Name */}
-              <div>
-                <label
-                  htmlFor="firstName"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  First Name *
-                </label>
-                <input
-                  type="text"
-                  id="firstName"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  required
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
-                />
-              </div>
-
-              {/* Last Name */}
-              <div>
-                <label
-                  htmlFor="lastName"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Last Name *
-                </label>
-                <input
-                  type="text"
-                  id="lastName"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  required
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
-                />
-              </div>
-
-              {/* Email */}
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Email *
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  disabled={!!selectedUser}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm disabled:bg-gray-100"
-                />
-              </div>
-
-              {/* Password */}
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Password {!selectedUser && '*'}
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required={!selectedUser}
-                  placeholder={selectedUser ? 'Leave blank to keep current password' : ''}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
-                />
-                <p className="mt-1 text-xs text-gray-500">
-                  Minimum 8 characters
-                </p>
-              </div>
-
-              {/* Role */}
-              <div>
-                <label
-                  htmlFor="role"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Role *
-                </label>
-                <select
-                  id="role"
-                  name="role"
-                  value={formData.role}
-                  onChange={handleChange}
-                  required
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
-                >
-                  <option value="employee">Employee</option>
-                  <option value="manager">Manager</option>
-                  <option value="admin">Admin</option>
-                </select>
-              </div>
-
-              {/* Manager (only for employees) */}
-              {formData.role === 'employee' && (
-                <div>
-                  <label
-                    htmlFor="manager"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Manager
-                  </label>
-                  <select
-                    id="manager"
-                    name="manager"
-                    value={formData.manager}
-                    onChange={handleChange}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
-                  >
-                    <option value="">No Manager</option>
-                    {managers.map((manager) => (
-                      <option key={manager._id} value={manager._id}>
-                        {manager.firstName} {manager.lastName}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-
-              {/* Country */}
-              <div>
-                <label
-                  htmlFor="country"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Country *
-                </label>
-                <select
-                  id="country"
-                  name="country"
-                  value={formData.country}
-                  onChange={handleChange}
-                  required
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
-                >
-                  {countries.map((country) => (
-                    <option key={country} value={country}>
-                      {country}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Active Status */}
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  id="isActive"
-                  name="isActive"
-                  checked={formData.isActive}
-                  onChange={handleChange}
-                  className="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded"
-                />
-                <label
-                  htmlFor="isActive"
-                  className="ml-2 block text-sm text-gray-900"
-                >
-                  Active User
-                </label>
-              </div>
-
-              {/* Buttons */}
-              <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-teal-600 text-base font-medium text-white hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 sm:col-start-2 sm:text-sm disabled:opacity-50"
-                >
-                  {loading ? 'Saving...' : selectedUser ? 'Update' : 'Create'}
-                </button>
-                <button
-                  type="button"
-                  onClick={onClose}
-                  disabled={loading}
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 sm:mt-0 sm:col-start-1 sm:text-sm"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
+            {/* Last Name */}
+            <div className="space-y-2">
+              <label className="text-small font-bold text-text-secondary ml-1 flex items-center gap-2">
+                <IdentificationIcon className="h-4 w-4 text-accent" /> Last Name
+              </label>
+              <input
+                type="text"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                required
+                className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium"
+                placeholder="Doe"
+              />
+            </div>
           </div>
-        </div>
+
+          {/* Email */}
+          <div className="space-y-2">
+            <label className="text-small font-bold text-text-secondary ml-1 flex items-center gap-2">
+              <EnvelopeIcon className="h-4 w-4 text-accent" /> Email Address
+            </label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              disabled={!!selectedUser}
+              className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              placeholder="john.doe@company.com"
+            />
+          </div>
+
+          {/* Password */}
+          <div className="space-y-2">
+            <label className="text-small font-bold text-text-secondary ml-1 flex items-center gap-2">
+              <KeyIcon className="h-4 w-4 text-accent" /> Password
+            </label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required={!selectedUser}
+              className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium"
+              placeholder={selectedUser ? '••••••••' : 'Set complex password'}
+            />
+            <p className="text-[10px] text-text-muted/60 ml-1 font-medium tracking-wide italic">
+              {selectedUser ? 'Leave blank to keep existing password.' : 'Minimum 8 characters required.'}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {/* Role */}
+            <div className="space-y-2">
+              <label className="text-small font-bold text-text-secondary ml-1 flex items-center gap-2">
+                <ShieldCheckIcon className="h-4 w-4 text-accent" /> System Role
+              </label>
+              <select
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+                required
+                className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium appearance-none cursor-pointer"
+              >
+                <option value="employee">Employee</option>
+                <option value="manager">Manager</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+
+            {/* Country */}
+            <div className="space-y-2">
+              <label className="text-small font-bold text-text-secondary ml-1 flex items-center gap-2">
+                <GlobeAltIcon className="h-4 w-4 text-accent" /> Location
+              </label>
+              <select
+                name="country"
+                value={formData.country}
+                onChange={handleChange}
+                required
+                className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium appearance-none cursor-pointer"
+              >
+                {countries.map((country) => (
+                  <option key={country} value={country}>{country}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Manager Selection */}
+          {formData.role === 'employee' && (
+            <div className="space-y-2 animate-in slide-in-from-top duration-300">
+              <label className="text-small font-bold text-text-secondary ml-1 flex items-center gap-2">
+                <UserIcon className="h-4 w-4 text-accent" /> Reporting Manager
+              </label>
+              <select
+                name="manager"
+                value={formData.manager}
+                onChange={handleChange}
+                className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium appearance-none cursor-pointer"
+              >
+                <option value="">No Manager Assigned</option>
+                {managers.map((manager) => (
+                  <option key={manager._id} value={manager._id}>
+                    {manager.firstName} {manager.lastName}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {/* Active Status */}
+          <div className="flex items-center justify-between p-5 bg-secondary/30 rounded-2xl border border-border">
+            <div className="flex items-center gap-3">
+              <div className={`w-3 h-3 rounded-full ${formData.isActive ? 'bg-success' : 'bg-text-muted/30'}`}></div>
+              <span className="text-body font-bold text-text-primary">Enable User Access</span>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                name="isActive"
+                checked={formData.isActive}
+                onChange={handleChange}
+                className="sr-only peer"
+              />
+              <div className="w-14 h-8 bg-text-muted/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-success shadow-inner"></div>
+            </label>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex flex-col-reverse sm:flex-row gap-4 pt-4">
+            <button
+              type="button"
+              onClick={onClose}
+              disabled={loading}
+              className="flex-1 py-4 text-body font-bold text-text-muted bg-secondary hover:bg-border rounded-2xl transition-all active:scale-95"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex-[2] py-4 text-body font-bold text-white bg-accent hover:bg-accent-dark rounded-2xl shadow-premium transition-all active:scale-95 disabled:opacity-50"
+            >
+              {loading ? 'Processing...' : selectedUser ? 'Save Changes' : 'Complete Onboarding'}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

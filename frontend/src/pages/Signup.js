@@ -2,6 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import { 
+  EnvelopeIcon, 
+  KeyIcon, 
+  UserIcon, 
+  BuildingOfficeIcon, 
+  GlobeAltIcon,
+  ArrowRightIcon 
+} from '@heroicons/react/24/outline';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -46,11 +54,11 @@ const Signup = () => {
         country,
       });
 
-      toast.success('Account created! Welcome to Ontime');
+      toast.success('Enterprise Account Initiated. Welcome to Income Tracker.');
       navigate('/login');
     } catch (error) {
       const message =
-        error.response?.data?.message || error.message || 'Something went wrong';
+        error.response?.data?.message || error.message || 'Verification failed. Please try again.';
       toast.error(message);
     } finally {
       setIsLoading(false);
@@ -58,148 +66,218 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex">
-      {/* Left Side – Brand & Copy (Same as Login) */}
-      <div className="hidden lg:flex flex-col pt-10 items-start bg-black text-white px-16 flex-1">
-        <div className="max-w-xl">
-          {/* Logo */}
-          <div className="flex items-center gap-3 mb-20">
-            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
-              <svg className="w-7 h-7 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    <div className="min-h-screen flex bg-surface font-inter overflow-x-hidden">
+      {/* Visual Side */}
+      <div className="hidden lg:flex flex-col justify-center items-start bg-primary text-white px-20 flex-1 relative overflow-hidden">
+        {/* Abstract Background Shapes */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-accent/20 rounded-full blur-3xl -mr-48 -mt-48"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl -ml-48 -mb-48"></div>
+        
+        <div className="max-w-xl relative z-10">
+          <div className="flex items-center gap-4 mb-24 group cursor-default">
+            <div className="w-14 h-14 bg-accent rounded-2xl flex items-center justify-center shadow-premium transition-transform group-hover:scale-110 duration-500">
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5}
+                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
               </svg>
             </div>
-            <span className="text-2xl font-extrabold">Ontime</span>
+            <span className="text-3xl font-black tracking-tighter uppercase italic">Income Tracker</span>
           </div>
 
-          {/* Hero */}
-          <h1 className="text-6xl font-extrabold leading-tight">
-            Expenses<br />
-            <span className="text-white/40">made simple.</span>
+          <h1 className="text-7xl font-black leading-[1.05] tracking-tight mb-10">
+            Join the<br />
+            <span className="text-accent italic">Elite</span> Financial<br />
+            Network.
           </h1>
 
-          {/* Minimal Features */}
-          <div className="mt-20 space-y-6 text-2xl font-light text-white/70">
-            <div>Submit in seconds</div>
-            <div>Approve instantly</div>
-            <div>Track everything</div>
-            <div>Any currency</div>
+          <p className="text-xl text-white/60 font-medium max-w-md leading-relaxed mb-16">
+            Initiate your enterprise-grade financial ecosystem and take control of your corporate spending.
+          </p>
+
+          <div className="flex flex-wrap gap-12">
+            <div className="flex flex-col">
+              <span className="text-xs font-bold text-white/40 uppercase tracking-widest mb-2">Automated</span>
+              <span className="text-xl font-black text-white italic">Workflows</span>
+            </div>
+            <div className="flex flex-col border-l border-white/10 pl-12">
+              <span className="text-xs font-bold text-white/40 uppercase tracking-widest mb-2">Real-time</span>
+              <span className="text-xl font-black text-white italic">Analytics</span>
+            </div>
+            <div className="flex flex-col border-l border-white/10 pl-12">
+              <span className="text-xs font-bold text-white/40 uppercase tracking-widest mb-2">Global</span>
+              <span className="text-xl font-black text-white italic">Compliance</span>
+            </div>
           </div>
+        </div>
+
+        <div className="absolute bottom-12 left-20 text-xs font-bold text-white/20 tracking-[0.3em] uppercase">
+          © 2025 Global Finance Corp.
         </div>
       </div>
 
-      {/* Right Side – Signup Form */}
-      <div className="flex-1 flex items-center justify-center bg-gray-50 px-8">
-        <div className="w-full max-w-md">
-          <div className="text-center mb-10 mt-10">
-            <h2 className="text-4xl font-extrabold text-gray-900">Get started</h2>
-            <p className="mt-3 text-gray-600">Create your Ontime account</p>
+      {/* Auth Side */}
+      <div className="flex-1 flex items-center justify-center p-8 py-20 relative overflow-y-auto">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 rounded-full blur-3xl -mr-32 -mt-32"></div>
+        
+        <div className="w-full max-w-lg relative z-10">
+          <div className="mb-12">
+            <h2 className="text-4xl font-black text-text-primary tracking-tight mb-3">Initiate Onboarding</h2>
+            <p className="text-text-muted font-medium">Create your administrative account to begin.</p>
           </div>
 
           <form onSubmit={onSubmit} className="space-y-6">
-            <div className="grid grid-cols-2 gap-4">
-              <input
-                type="text"
-                name="firstName"
-                value={firstName}
-                onChange={onChange}
-                placeholder="First name"
-                required
-                className="px-4 py-4 text-lg border-0 border-b-2 border-gray-300 focus:border-black outline-none transition bg-transparent"
-              />
-              <input
-                type="text"
-                name="lastName"
-                value={lastName}
-                onChange={onChange}
-                placeholder="Last name"
-                required
-                className="px-4 py-4 text-lg border-0 border-b-2 border-gray-300 focus:border-black outline-none transition bg-transparent"
-              />
+            <div className="grid grid-cols-2 gap-6">
+              <div className="space-y-2 group">
+                <label className="text-xs font-bold text-text-muted uppercase tracking-widest ml-1 group-focus-within:text-accent transition-colors">First Name</label>
+                <div className="relative">
+                  <UserIcon className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted group-focus-within:text-accent transition-colors" />
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={firstName}
+                    onChange={onChange}
+                    required
+                    placeholder="John"
+                    className="w-full pl-14 pr-6 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-bold text-text-primary placeholder:text-text-muted/40"
+                  />
+                </div>
+              </div>
+              <div className="space-y-2 group">
+                <label className="text-xs font-bold text-text-muted uppercase tracking-widest ml-1 group-focus-within:text-accent transition-colors">Last Name</label>
+                <div className="relative">
+                  <UserIcon className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted group-focus-within:text-accent transition-colors" />
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={lastName}
+                    onChange={onChange}
+                    required
+                    placeholder="Doe"
+                    className="w-full pl-14 pr-6 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-bold text-text-primary placeholder:text-text-muted/40"
+                  />
+                </div>
+              </div>
             </div>
 
-            <input
-              type="email"
-              name="email"
-              value={email}
-              onChange={onChange}
-              placeholder="Work email"
-              required
-              className="w-full px-4 py-4 text-lg border-0 border-b-2 border-gray-300 focus:border-black outline-none transition bg-transparent"
-            />
+            <div className="space-y-2 group">
+              <label className="text-xs font-bold text-text-muted uppercase tracking-widest ml-1 group-focus-within:text-accent transition-colors">Corporate Email</label>
+              <div className="relative">
+                <EnvelopeIcon className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted group-focus-within:text-accent transition-colors" />
+                <input
+                  type="email"
+                  name="email"
+                  value={email}
+                  onChange={onChange}
+                  required
+                  placeholder="john.doe@company.com"
+                  className="w-full pl-14 pr-6 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-bold text-text-primary placeholder:text-text-muted/40"
+                />
+              </div>
+            </div>
 
-            <input
-              type="text"
-              name="companyName"
-              value={companyName}
-              onChange={onChange}
-              placeholder="Company name"
-              required
-              className="w-full px-4 py-4 text-lg border-0 border-b-2 border-gray-300 focus:border-black outline-none transition bg-transparent"
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2 group">
+                <label className="text-xs font-bold text-text-muted uppercase tracking-widest ml-1 group-focus-within:text-accent transition-colors">Organization</label>
+                <div className="relative">
+                  <BuildingOfficeIcon className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted group-focus-within:text-accent transition-colors" />
+                  <input
+                    type="text"
+                    name="companyName"
+                    value={companyName}
+                    onChange={onChange}
+                    required
+                    placeholder="Inc. Corp"
+                    className="w-full pl-14 pr-6 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-bold text-text-primary placeholder:text-text-muted/40"
+                  />
+                </div>
+              </div>
+              <div className="space-y-2 group">
+                <label className="text-xs font-bold text-text-muted uppercase tracking-widest ml-1 group-focus-within:text-accent transition-colors">Jurisdiction</label>
+                <div className="relative">
+                  <GlobeAltIcon className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted group-focus-within:text-accent transition-colors" />
+                  <select
+                    name="country"
+                    value={country}
+                    onChange={onChange}
+                    required
+                    className="w-full pl-14 pr-6 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-bold text-text-primary appearance-none cursor-pointer"
+                  >
+                    <option value="">Global</option>
+                    <option value="United States">United States</option>
+                    <option value="United Kingdom">United Kingdom</option>
+                    <option value="Canada">Canada</option>
+                    <option value="India">India</option>
+                    <option value="Germany">Germany</option>
+                    <option value="Australia">Australia</option>
+                  </select>
+                </div>
+              </div>
+            </div>
 
-            <select
-              name="country"
-              value={country}
-              onChange={onChange}
-              required
-              className="w-full px-4 py-4 text-lg border-0 border-b-2 border-gray-300 focus:border-black outline-none transition bg-transparent"
-            >
-              <option value="">Country</option>
-              <option value="United States">United States</option>
-              <option value="United Kingdom">United Kingdom</option>
-              <option value="Canada">Canada</option>
-              <option value="Australia">Australia</option>
-              <option value="Germany">Germany</option>
-              <option value="India">India</option>
-              {/* Add more as needed */}
-              <option value="Other">Other</option>
-            </select>
-
-            <input
-              type="password"
-              name="password"
-              value={password}
-              onChange={onChange}
-              placeholder="Password (6+ characters)"
-              required
-              minLength="6"
-              className="w-full px-4 py-4 text-lg border-0 border-b-2 border-gray-300 focus:border-black outline-none transition bg-transparent"
-            />
-
-            <input
-              type="password"
-              name="confirmPassword"
-              value={confirmPassword}
-              onChange={onChange}
-              placeholder="Confirm password"
-              required
-              className="w-full px-4 py-4 text-lg border-0 border-b-2 border-gray-300 focus:border-black outline-none transition bg-transparent"
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2 group">
+                <label className="text-xs font-bold text-text-muted uppercase tracking-widest ml-1 group-focus-within:text-accent transition-colors">Access Key</label>
+                <div className="relative">
+                  <KeyIcon className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted group-focus-within:text-accent transition-colors" />
+                  <input
+                    type="password"
+                    name="password"
+                    value={password}
+                    onChange={onChange}
+                    required
+                    placeholder="••••••••"
+                    className="w-full pl-14 pr-6 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-bold text-text-primary placeholder:text-text-muted/40"
+                  />
+                </div>
+              </div>
+              <div className="space-y-2 group">
+                <label className="text-xs font-bold text-text-muted uppercase tracking-widest ml-1 group-focus-within:text-accent transition-colors">Confirm Key</label>
+                <div className="relative">
+                  <KeyIcon className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted group-focus-within:text-accent transition-colors" />
+                  <input
+                    type="password"
+                    name="confirmPassword"
+                    value={confirmPassword}
+                    onChange={onChange}
+                    required
+                    placeholder="••••••••"
+                    className="w-full pl-14 pr-6 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-bold text-text-primary placeholder:text-text-muted/40"
+                  />
+                </div>
+              </div>
+            </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full mt-8 bg-black text-white py-4 text-lg font-semibold rounded-lg hover:bg-gray-900 transition-all duration-200 disabled:opacity-50"
+              className="w-full mt-10 bg-accent text-white py-5 text-sm font-black rounded-2xl hover:bg-accent-dark transition-all shadow-premium active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3 uppercase tracking-widest"
             >
-              {isLoading ? 'Creating Account...' : 'Create Account'}
+              {isLoading ? (
+                <>
+                  <div className="animate-spin h-5 w-5 border-2 border-white/20 border-t-white rounded-full"></div>
+                  Initializing...
+                </>
+              ) : (
+                <>
+                  Initialize Account
+                  <ArrowRightIcon className="h-4 w-4" />
+                </>
+              )}
             </button>
           </form>
 
-          <p className="mt-8 text-center text-gray-600">
-            Already have an account?{' '}
-            <Link to="/login" className="font-semibold text-black hover:underline">
-              Sign in
-            </Link>
-          </p>
+          <div className="mt-12 text-center">
+            <p className="text-sm font-medium text-text-muted">
+              Already have an profile?{' '}
+              <Link to="/login" className="font-black text-accent hover:underline uppercase tracking-tighter ml-1">
+                Enter System
+              </Link>
+            </p>
+          </div>
 
-          <p className="mt-12 text-center text-xs text-gray-500">
-            By signing up, you agree to our{' '}
-            <a href="#!" className="underline">Terms</a> and{' '}
-            <a href="#!" className="underline">Privacy Policy</a>
-            <br />© 2025 Ontime. All rights reserved.
-          </p>
+          <div className="mt-16 text-center text-[10px] font-bold text-text-muted/40 uppercase tracking-[0.2em] leading-loose">
+            By initializing, you agree to our <a href="#!" className="text-accent underline">Protocols</a> & <a href="#!" className="text-accent underline">Privacy Charters</a>
+          </div>
         </div>
       </div>
     </div>
