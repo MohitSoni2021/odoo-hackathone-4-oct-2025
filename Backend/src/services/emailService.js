@@ -136,7 +136,7 @@ exports.sendVerificationEmail = async (user, otp) => {
     console.log(`[EmailService] Verification email sent successfully to: ${user.email}`);
   } catch (error) {
     console.error(`[EmailService] Failed to send verification email to ${user.email}:`, error);
-    throw new Error('Notification delivery failure: Verification email could not be dispatched.');
+    throw new Error(`Notification delivery failure: ${error.message}`);
   }
 };
 
@@ -165,6 +165,6 @@ exports.sendPasswordResetOTP = async (user, otp) => {
     console.log(`[EmailService] Password reset email sent successfully to: ${user.email}`);
   } catch (error) {
     console.error(`[EmailService] Failed to send password reset email to ${user.email}:`, error);
-    throw new Error('Notification delivery failure: Reset code could not be dispatched.');
+    throw new Error(`Notification delivery failure: ${error.message}`);
   }
 };
