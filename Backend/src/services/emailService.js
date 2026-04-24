@@ -1,13 +1,22 @@
 const nodemailer = require('nodemailer');
 
 const createTransporter = () => {
+  const user = (process.env.EMAIL_USERNAME || '').trim();
+  const pass = process.env.EMAIL_PASSWORD ? process.env.EMAIL_PASSWORD.replace(/['"]+/g, '').trim() : '';
+
+  if (!user || !pass) {
+    console.error('[EmailService] CRITICAL: Missing email credentials!', {
+      hasUser: !!user,
+      hasPass: !!pass,
+      envUser: process.env.EMAIL_USERNAME,
+      // Do not log pass
+    });
+  }
+
   // Use service: 'gmail' which is more robust for Gmail accounts
   const transporter = nodemailer.createTransport({
     service: 'gmail',
-    auth: {
-      user: (process.env.EMAIL_USERNAME || '').trim(),
-      pass: process.env.EMAIL_PASSWORD ? process.env.EMAIL_PASSWORD.replace(/['"]+/g, '').trim() : '',
-    },
+    auth: { user, pass },
   });
 
   // Verify connection configuration
