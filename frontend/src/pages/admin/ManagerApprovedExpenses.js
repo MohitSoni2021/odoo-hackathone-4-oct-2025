@@ -10,7 +10,6 @@ import {
   UserGroupIcon,
   BanknotesIcon,
   ArrowPathIcon,
-  NoSymbolIcon,
   CheckBadgeIcon,
 } from '@heroicons/react/24/outline';
 import { approveExpense, rejectExpense } from '../../store/slices/expenseSlice';

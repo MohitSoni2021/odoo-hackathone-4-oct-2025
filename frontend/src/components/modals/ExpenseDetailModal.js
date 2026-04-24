@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { XMarkIcon, CheckCircleIcon, XCircleIcon, CalendarIcon, UserIcon, TagIcon, DocumentTextIcon, BanknotesIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon, CheckCircleIcon, XCircleIcon, CalendarIcon, UserIcon, TagIcon, DocumentTextIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
 import { useSelector } from 'react-redux';
 import { useCurrency } from '../../hooks/useCurrency';
 

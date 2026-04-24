@@ -13,7 +13,6 @@ import {
   PlusCircleIcon,
   DocumentTextIcon,
   TagIcon,
-  ArrowRightIcon,
   ArchiveBoxIcon,
   ArrowPathIcon,
 } from '@heroicons/react/24/outline';

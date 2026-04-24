@@ -16,7 +16,6 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   BriefcaseIcon,
-  BanknotesIcon,
   Squares2X2Icon,
 } from '@heroicons/react/24/outline';
 

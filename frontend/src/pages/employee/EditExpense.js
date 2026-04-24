@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { updateExpense } from '../../store/slices/expenseSlice';
@@ -17,7 +17,6 @@ import {
   ArrowPathIcon,
   PencilSquareIcon,
   ShieldCheckIcon,
-  ArrowRightIcon,
 } from '@heroicons/react/24/outline';
 
 const EditExpense = () => {
@@ -54,11 +53,7 @@ const EditExpense = () => {
 
   const currencies = ['USD', 'EUR', 'GBP', 'INR', 'CAD', 'AUD', 'JPY'];
 
-  useEffect(() => {
-    fetchExpense();
-  }, [id]);
-
-  const fetchExpense = async () => {
+  const fetchExpense = useCallback(async () => {
     if (!id) {
       toast.error('Expense identification sequence missing.');
       navigate('/dashboard/expenses');
@@ -96,7 +91,11 @@ const EditExpense = () => {
     } finally {
       setFetchLoading(false);
     }
-  };
+  }, [id, navigate]);
+
+  useEffect(() => {
+    fetchExpense();
+  }, [fetchExpense]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

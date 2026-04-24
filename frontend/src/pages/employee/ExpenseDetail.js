@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import expenseService from '../../services/expenseService';
 import { useCurrency } from '../../hooks/useCurrency';
 import { toast } from 'react-toastify';
 import {
   ArrowLeftIcon,
-  CalendarIcon,
   BanknotesIcon,
-  TagIcon,
   DocumentTextIcon,
   UserIcon,
   ClockIcon,
@@ -27,11 +25,7 @@ const ExpenseDetail = () => {
   const [loading, setLoading] = useState(true);
   const { formatExpenseAmount } = useCurrency();
 
-  useEffect(() => {
-    fetchExpenseDetail();
-  }, [id]);
-
-  const fetchExpenseDetail = async () => {
+  const fetchExpenseDetail = useCallback(async () => {
     if (!id) {
       toast.error('Expense record identification missing.');
       navigate('/dashboard/expenses');
@@ -52,7 +46,11 @@ const ExpenseDetail = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id, navigate]);
+
+  useEffect(() => {
+    fetchExpenseDetail();
+  }, [fetchExpenseDetail]);
 
   const getStatusBadgeStyle = (status) => {
     switch (status) {

@@ -16,9 +16,7 @@ import {
   ChevronRightIcon,
   ChartBarIcon,
   Cog6ToothIcon,
-  SparklesIcon,
   BriefcaseIcon,
-  IdentificationIcon,
   PresentationChartLineIcon,
   ShieldCheckIcon,
 } from '@heroicons/react/24/outline';

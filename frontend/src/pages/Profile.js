@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import authService from '../services/authService';
 import { 
   UserIcon, 
   EnvelopeIcon, 
   ShieldCheckIcon, 
-  BuildingOfficeIcon,
   IdentificationIcon,
   PencilSquareIcon,
   CheckIcon,
   XMarkIcon,
-  KeyIcon
+  KeyIcon,
+  BuildingOfficeIcon
 } from '@heroicons/react/24/outline';
 
 const Profile = () => {
@@ -301,6 +301,43 @@ const Profile = () => {
                   <DetailCard icon={KeyIcon} label="Password Age" value="Recent" color="primary" />
                 </div>
               )}
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl border border-border shadow-premium overflow-hidden">
+            <div className="px-8 py-6 border-b border-border bg-secondary/30">
+              <h3 className="text-sm font-black text-text-primary uppercase tracking-widest flex items-center gap-3">
+                <BuildingOfficeIcon className="w-5 h-5 text-accent" />
+                Organizational Identity
+              </h3>
+            </div>
+            <div className="p-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <DetailCard 
+                  icon={BuildingOfficeIcon} 
+                  label="Company Name" 
+                  value={user?.company?.name || 'InTrack Global'} 
+                  color="accent" 
+                />
+                <DetailCard 
+                  icon={IdentificationIcon} 
+                  label="Organization ID" 
+                  value={user?.company?._id?.slice(-12).toUpperCase() || 'ORG-882910'} 
+                  color="primary" 
+                />
+                <DetailCard 
+                  icon={UserIcon} 
+                  label="Administrative Unit" 
+                  value={user?.role === 'admin' ? 'Strategic Command' : 'Operational Division'} 
+                  color="info" 
+                />
+                <DetailCard 
+                  icon={ShieldCheckIcon} 
+                  label="Clearance Level" 
+                  value={user?.role?.toUpperCase() || 'OPERATIVE'} 
+                  color="success" 
+                />
+              </div>
             </div>
           </div>
         </div>

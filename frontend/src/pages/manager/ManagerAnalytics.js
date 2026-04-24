@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import {
   AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
+  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from 'recharts';
 import {
   ArrowTrendingUpIcon,
   ArrowTrendingDownIcon,
   DocumentTextIcon,
-  CheckCircleIcon,
-  XCircleIcon,
-  ClockIcon,
   UsersIcon,
-  BanknotesIcon,
-  ChartBarIcon,
   ArrowDownTrayIcon,
   ShieldCheckIcon,
   BoltIcon,
@@ -20,11 +15,9 @@ import {
   ScaleIcon,
   CurrencyDollarIcon,
 } from '@heroicons/react/24/outline';
-import { useCurrency } from '../../hooks/useCurrency';
 import api from '../../services/api';
 
 const ManagerAnalytics = () => {
-  const { formatExpenseAmount } = useCurrency();
   const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
   const [dateRange] = useState('all');

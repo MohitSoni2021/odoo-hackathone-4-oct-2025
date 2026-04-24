@@ -12,8 +12,6 @@ import {
   XCircleIcon,
   ClockIcon,
   CurrencyDollarIcon,
-  ChartBarIcon,
-  PlusIcon,
   ArrowUpRightIcon,
   ShieldCheckIcon,
   UserPlusIcon,

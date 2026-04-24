@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { fetchUsers, deleteUser, setSelectedUser } from '../../store/slices/userSlice';
 import { toast } from 'react-toastify';
 import {
@@ -20,7 +19,6 @@ import UserModal from '../../components/modals/UserModal';
 
 const UserManagement = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { users, loading } = useSelector((state) => state.users);
 
   const [searchTerm, setSearchTerm] = useState('');

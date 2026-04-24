@@ -16,7 +16,6 @@ import {
   WalletIcon,
   BoltIcon,
   BellIcon,
-  ArrowUpRightIcon,
   SparklesIcon,
 } from '@heroicons/react/24/outline';
 
