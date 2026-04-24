@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
+const crypto = require('crypto');
 
 /**
  * @swagger
@@ -100,6 +101,14 @@ const userSchema = new mongoose.Schema(
     lastLogin: {
       type: Date,
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    otp: String,
+    otpExpires: Date,
+    passwordResetToken: String,
+    passwordResetExpires: Date,
   },
   {
     timestamps: true,
@@ -122,6 +131,33 @@ userSchema.methods.correctPassword = async function (
   userPassword
 ) {
   return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+// Method to generate a 10-character random alphanumeric OTP
+userSchema.methods.createOTP = function () {
+  const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  let otp = '';
+  for (let i = 0; i < 10; i++) {
+    otp += chars[Math.floor(Math.random() * chars.length)];
+  }
+  
+  this.otp = otp;
+  this.otpExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+
+  return otp;
+};
+
+userSchema.methods.createPasswordResetToken = function () {
+  const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  let otp = '';
+  for (let i = 0; i < 10; i++) {
+    otp += chars[Math.floor(Math.random() * chars.length)];
+  }
+
+  this.passwordResetToken = otp;
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+
+  return otp;
 };
 
 const User = mongoose.model('User', userSchema);

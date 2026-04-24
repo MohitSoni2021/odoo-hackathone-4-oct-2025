@@ -6,18 +6,18 @@ const API_URL = process.env.REACT_APP_API_URL + '/auth';
 // Register user
 const register = async (userData) => {
   const response = await axios.post(API_URL + '/signup', userData);
+  return response.data;
+};
 
-  if (response.data) {
-    // Backend returns { status, token, data: { user } }
-    // We need to flatten it to { token, ...user }
+// Verify Signup
+const verifySignup = async (email, otp) => {
+  const response = await axios.post(API_URL + '/verify-signup', { email, otp });
+
+  if (response.data && response.data.token) {
     const { token, data } = response.data;
     const userWithToken = {
       token,
-      ...data.user._doc || data.user, // Handle both mongoose document and plain object
-      role: data.user.role,
-      email: data.user.email,
-      firstName: data.user.firstName,
-      lastName: data.user.lastName,
+      ...data.user._doc || data.user,
     };
     const encryptedUser = encryptData(userWithToken);
     sessionStorage.setItem('user', encryptedUser);
@@ -99,12 +99,39 @@ const updateUserProfile = async (userData) => {
   return response.data;
 };
 
+// Forgot password
+const forgotPassword = async (email) => {
+  const response = await axios.post(API_URL + '/forgot-password', { email });
+  return response.data;
+};
+
+// Reset password
+const resetPassword = async (email, otp, password) => {
+  const response = await axios.post(API_URL + '/reset-password', { email, otp, password });
+  
+  if (response.data && response.data.token) {
+    const { token, data } = response.data;
+    const userWithToken = {
+      token,
+      ...data.user._doc || data.user,
+    };
+    const encryptedUser = encryptData(userWithToken);
+    sessionStorage.setItem('user', encryptedUser);
+    return userWithToken;
+  }
+  
+  return response.data;
+};
+
 const authService = {
   register,
+  verifySignup,
   login,
   logout,
   getCurrentUser,
   updateUserProfile,
+  forgotPassword,
+  resetPassword,
 };
 
 export default authService;
