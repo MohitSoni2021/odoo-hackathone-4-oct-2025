@@ -22,7 +22,12 @@ const Login = () => {
 
   useEffect(() => {
     if (isError) {
-      toast.error(message);
+      if (message.toLowerCase().includes('verify your account')) {
+        toast.info('Account Verification Required');
+        navigate('/verify-signup', { state: { email } });
+      } else {
+        toast.error(message);
+      }
       dispatch(reset());
     }
     if (isSuccess && user) {
@@ -30,7 +35,7 @@ const Login = () => {
       navigate(getDefaultRouteForRole(user.role), { replace: true });
       dispatch(reset());
     }
-  }, [isError, isSuccess, message, user, navigate, dispatch]);
+  }, [isError, isSuccess, message, user, navigate, dispatch, email]);
 
   const onChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));

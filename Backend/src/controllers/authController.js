@@ -72,6 +72,10 @@ exports.signup = async (req, res) => {
       await emailService.sendVerificationEmail(newUser, otp);
     } catch (error) {
       console.error('Verification email could not be sent:', error);
+      return res.status(500).json({
+        status: 'fail',
+        message: `Account created, but verification email failed: ${error.message}`,
+      });
     }
 
     res.status(201).json({
@@ -154,6 +158,10 @@ exports.login = async (req, res) => {
         await emailService.sendVerificationEmail(user, otp);
       } catch (err) {
         console.error('Error sending verification email:', err);
+        return res.status(500).json({
+          status: 'fail',
+          message: `Verification required, but email failed: ${err.message}`,
+        });
       }
 
       return res.status(403).json({
@@ -297,7 +305,7 @@ exports.forgotPassword = async (req, res) => {
 
       return res.status(500).json({
         status: 'fail',
-        message: 'There was an error sending the email. Try again later!',
+        message: `Notification delivery failure: ${err.message || 'Verification email could not be dispatched.'}`,
       });
     }
   } catch (error) {
