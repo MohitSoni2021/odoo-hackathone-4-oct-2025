@@ -1,15 +1,25 @@
 const nodemailer = require('nodemailer');
 
 const createTransporter = () => {
-  return nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: process.env.EMAIL_PORT,
-    secure: false, // true for 465, false for other ports
+  // Use service: 'gmail' which is more robust for Gmail accounts
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
     auth: {
       user: process.env.EMAIL_USERNAME,
-      pass: process.env.EMAIL_PASSWORD,
+      pass: process.env.EMAIL_PASSWORD ? process.env.EMAIL_PASSWORD.replace(/['"]+/g, '') : '',
     },
   });
+
+  // Verify connection configuration
+  transporter.verify((error, success) => {
+    if (error) {
+      console.error('[EmailService] Transporter configuration error:', error);
+    } else {
+      console.log('[EmailService] Transporter is ready to deliver messages');
+    }
+  });
+
+  return transporter;
 };
 
 const baseTemplate = (content) => `
@@ -115,12 +125,19 @@ exports.sendVerificationEmail = async (user, otp) => {
     <p style="margin-top: 32px;">Best regards,<br>The InTrack Team</p>
   `;
 
-  await transporter.sendMail({
-    from: `"InTrack" <${process.env.EMAIL_FROM}>`,
-    to: user.email,
-    subject: 'Verify your InTrack account',
-    html: baseTemplate(content),
-  });
+  try {
+    console.log(`[EmailService] Attempting to send verification email to: ${user.email}`);
+    await transporter.sendMail({
+      from: `"InTrack" <${process.env.EMAIL_FROM || process.env.EMAIL_USERNAME}>`,
+      to: user.email,
+      subject: 'Verify your InTrack account',
+      html: baseTemplate(content),
+    });
+    console.log(`[EmailService] Verification email sent successfully to: ${user.email}`);
+  } catch (error) {
+    console.error(`[EmailService] Failed to send verification email to ${user.email}:`, error);
+    throw new Error('Notification delivery failure: Verification email could not be dispatched.');
+  }
 };
 
 exports.sendPasswordResetOTP = async (user, otp) => {
@@ -137,10 +154,17 @@ exports.sendPasswordResetOTP = async (user, otp) => {
     <p style="margin-top: 32px;">Best regards,<br>The InTrack Team</p>
   `;
 
-  await transporter.sendMail({
-    from: `"InTrack" <${process.env.EMAIL_FROM}>`,
-    to: user.email,
-    subject: 'Your Password Reset Code',
-    html: baseTemplate(content),
-  });
+  try {
+    console.log(`[EmailService] Attempting to send password reset OTP to: ${user.email}`);
+    await transporter.sendMail({
+      from: `"InTrack" <${process.env.EMAIL_FROM || process.env.EMAIL_USERNAME}>`,
+      to: user.email,
+      subject: 'Your Password Reset Code',
+      html: baseTemplate(content),
+    });
+    console.log(`[EmailService] Password reset email sent successfully to: ${user.email}`);
+  } catch (error) {
+    console.error(`[EmailService] Failed to send password reset email to ${user.email}:`, error);
+    throw new Error('Notification delivery failure: Reset code could not be dispatched.');
+  }
 };
