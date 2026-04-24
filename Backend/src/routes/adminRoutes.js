@@ -5,12 +5,6 @@ const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
-/**
- * @swagger
- * tags:
- *   name: Admin
- *   description: Administrative and initial setup API
- */
 
 
 // Helper function to create JWT token
@@ -48,44 +42,6 @@ const getCurrencyByCountry = (country) => {
   return currencyMap[country] || 'USD';
 };
 
-/**
- * @swagger
- * /api/admin/create-admin:
- *   post:
- *     summary: Create a new admin user with company
- *     tags: [Admin]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - firstName
- *               - lastName
- *               - email
- *               - password
- *               - country
- *               - companyName
- *             properties:
- *               firstName:
- *                 type: string
- *               lastName:
- *                 type: string
- *               email:
- *                 type: string
- *               password:
- *                 type: string
- *               country:
- *                 type: string
- *               companyName:
- *                 type: string
- *     responses:
- *       201:
- *         description: Admin user and company created successfully
- *       400:
- *         description: Bad request
- */
 
 router.post('/create-admin', async (req, res) => {
   try {
@@ -173,28 +129,6 @@ router.post('/create-admin', async (req, res) => {
   }
 });
 
-/**
- * @swagger
- * /api/admin/create-test-data:
- *   post:
- *     summary: Create test data (admin, managers, employees, expenses)
- *     tags: [Admin]
- *     requestBody:
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               companyName:
- *                 type: string
- *               country:
- *                 type: string
- *     responses:
- *       201:
- *         description: Test data created successfully
- *       400:
- *         description: Bad request
- */
 router.post('/create-test-data', async (req, res) => {
   try {
     const { companyName = 'Test Company', country = 'United States' } = req.body;
