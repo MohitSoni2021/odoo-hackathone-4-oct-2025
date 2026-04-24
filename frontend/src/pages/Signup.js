@@ -75,7 +75,8 @@ const Signup = () => {
         
         <div className="max-w-xl relative z-10">
           <div className="flex items-center gap-4 mb-24 group cursor-default">
-            <div className="w-14 h-14 bg-accent rounded-2xl flex items-center justify-center shadow-premium transition-transform group-hover:scale-110 duration-500">
+            <div className="w-14 h-14 bg-accent rounded-xl flex items-center justify-center shadow-premium transition-transform group-hover:scale-110 duration-500">
+
               <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5}
                   d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
@@ -138,7 +139,8 @@ const Signup = () => {
                     onChange={onChange}
                     required
                     placeholder="John"
-                    className="w-full pl-14 pr-6 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-bold text-text-primary placeholder:text-text-muted/40"
+                    className="w-full pl-14 pr-6 py-4 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-bold text-text-primary placeholder:text-text-muted/40"
+
                   />
                 </div>
               </div>
@@ -153,7 +155,8 @@ const Signup = () => {
                     onChange={onChange}
                     required
                     placeholder="Doe"
-                    className="w-full pl-14 pr-6 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-bold text-text-primary placeholder:text-text-muted/40"
+                    className="w-full pl-14 pr-6 py-4 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-bold text-text-primary placeholder:text-text-muted/40"
+
                   />
                 </div>
               </div>
@@ -187,7 +190,8 @@ const Signup = () => {
                     onChange={onChange}
                     required
                     placeholder="Inc. Corp"
-                    className="w-full pl-14 pr-6 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-bold text-text-primary placeholder:text-text-muted/40"
+                    className="w-full pl-14 pr-6 py-4 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-bold text-text-primary placeholder:text-text-muted/40"
+
                   />
                 </div>
               </div>
@@ -226,7 +230,8 @@ const Signup = () => {
                     onChange={onChange}
                     required
                     placeholder="••••••••"
-                    className="w-full pl-14 pr-6 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-bold text-text-primary placeholder:text-text-muted/40"
+                    className="w-full pl-14 pr-6 py-4 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-bold text-text-primary placeholder:text-text-muted/40"
+
                   />
                 </div>
               </div>
@@ -241,7 +246,8 @@ const Signup = () => {
                     onChange={onChange}
                     required
                     placeholder="••••••••"
-                    className="w-full pl-14 pr-6 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-bold text-text-primary placeholder:text-text-muted/40"
+                    className="w-full pl-14 pr-6 py-4 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-bold text-text-primary placeholder:text-text-muted/40"
+
                   />
                 </div>
               </div>
@@ -250,7 +256,7 @@ const Signup = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full mt-10 bg-accent text-white py-5 text-sm font-black rounded-2xl hover:bg-accent-dark transition-all shadow-premium active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3 uppercase tracking-widest"
+              className="w-full mt-10 bg-accent text-white py-5 text-sm font-black rounded-xl hover:bg-accent-dark transition-all shadow-premium active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3 uppercase tracking-widest"
             >
               {isLoading ? (
                 <>

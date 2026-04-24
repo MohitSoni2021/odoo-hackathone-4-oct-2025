@@ -81,7 +81,8 @@ const CreateUser = () => {
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-6">
         <div className="flex items-center gap-6">
-          <div className="p-4 bg-primary rounded-2xl shadow-premium">
+          <div className="p-4 bg-primary rounded-xl shadow-premium">
+
             <UserPlusIcon className="h-8 w-8 text-white" />
           </div>
           <div>
@@ -93,8 +94,9 @@ const CreateUser = () => {
         <div>
           <button
             onClick={() => navigate('/dashboard/users')}
-            className="group inline-flex items-center px-6 py-3 bg-secondary text-text-primary font-bold rounded-2xl hover:bg-border transition-all active:scale-95"
+            className="group inline-flex items-center px-6 py-3 bg-secondary text-text-primary font-bold rounded-xl hover:bg-border transition-all active:scale-95"
           >
+
             <ArrowLeftIcon className="h-5 w-5 mr-2 group-hover:-translate-x-1 transition-transform" />
             Back to Directory
           </button>
@@ -104,7 +106,8 @@ const CreateUser = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         {/* Left Column: Form Card */}
         <div className="lg:col-span-2">
-          <div className="bg-surface rounded-[2.5rem] border border-border shadow-premium overflow-hidden">
+          <div className="bg-surface rounded-xl border border-border shadow-premium overflow-hidden">
+
             <div className="px-10 py-8 bg-secondary/30 border-b border-border">
               <h3 className="text-h-m font-bold text-text-primary tracking-tight flex items-center gap-2">
                 <IdentificationIcon className="h-6 w-6 text-accent" /> Personnel Credentials
@@ -124,9 +127,10 @@ const CreateUser = () => {
                     value={formData.firstName}
                     onChange={handleChange}
                     required
-                    className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium"
+                    className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium"
                     placeholder="e.g. Michael"
                   />
+
                 </div>
 
                 {/* Last Name */}
@@ -140,9 +144,10 @@ const CreateUser = () => {
                     value={formData.lastName}
                     onChange={handleChange}
                     required
-                    className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium"
+                    className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium"
                     placeholder="e.g. Scott"
                   />
+
                 </div>
 
                 {/* Email */}
@@ -156,9 +161,10 @@ const CreateUser = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium"
+                    className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium"
                     placeholder="michael.scott@dundermifflin.com"
                   />
+
                 </div>
 
                 {/* Password */}
@@ -172,9 +178,10 @@ const CreateUser = () => {
                     value={formData.password}
                     onChange={handleChange}
                     required
-                    className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium"
+                    className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium"
                     placeholder="••••••••"
                   />
+
                   <p className="text-[10px] text-text-muted/60 ml-1 font-medium italic">Min. 8 chars</p>
                 </div>
 
@@ -188,8 +195,9 @@ const CreateUser = () => {
                     value={formData.role}
                     onChange={handleChange}
                     required
-                    className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium appearance-none cursor-pointer"
+                    className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium appearance-none cursor-pointer"
                   >
+
                     <option value="employee">Employee (Basic Access)</option>
                     <option value="manager">Manager (Team Approval)</option>
                     <option value="admin">Administrator (Full Access)</option>
@@ -206,8 +214,9 @@ const CreateUser = () => {
                     value={formData.country}
                     onChange={handleChange}
                     required
-                    className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium appearance-none cursor-pointer"
+                    className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium appearance-none cursor-pointer"
                   >
+
                     {countries.map((c) => (
                       <option key={c} value={c}>{c}</option>
                     ))}
@@ -225,8 +234,9 @@ const CreateUser = () => {
                     name="manager"
                     value={formData.manager}
                     onChange={handleChange}
-                    className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium appearance-none cursor-pointer"
+                    className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium appearance-none cursor-pointer"
                   >
+
                     <option value="">No Manager Assigned</option>
                     {managers.map((m) => (
                       <option key={m._id} value={m._id}>
@@ -238,7 +248,8 @@ const CreateUser = () => {
               )}
 
               {/* Active Toggle */}
-              <div className="flex items-center justify-between p-6 bg-secondary/30 rounded-3xl border border-border">
+              <div className="flex items-center justify-between p-6 bg-secondary/30 rounded-xl border border-border">
+
                 <div>
                   <h4 className="text-body font-bold text-text-primary">Instant Activation</h4>
                   <p className="text-small text-text-muted">Allow user to sign in immediately after creation.</p>
@@ -261,15 +272,17 @@ const CreateUser = () => {
                   type="button"
                   onClick={() => navigate('/dashboard/users')}
                   disabled={loading}
-                  className="px-8 py-4 text-body font-bold text-text-muted bg-secondary hover:bg-border rounded-2xl transition-all active:scale-95"
+                  className="px-8 py-4 text-body font-bold text-text-muted bg-secondary hover:bg-border rounded-xl transition-all active:scale-95"
                 >
+
                   Discard
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-10 py-4 text-body font-bold text-white bg-accent hover:bg-accent-dark rounded-2xl shadow-premium transition-all active:scale-95 disabled:opacity-50 flex items-center gap-3"
+                  className="px-10 py-4 text-body font-bold text-white bg-accent hover:bg-accent-dark rounded-xl shadow-premium transition-all active:scale-95 disabled:opacity-50 flex items-center gap-3"
                 >
+
                   {loading ? (
                     <>
                       <div className="animate-spin h-5 w-5 border-2 border-white/20 border-t-white rounded-full"></div>
@@ -289,7 +302,8 @@ const CreateUser = () => {
 
         {/* Right Column: Information/Guide */}
         <div className="space-y-8">
-          <div className="bg-primary p-8 rounded-[2.5rem] shadow-premium text-white relative overflow-hidden group">
+          <div className="bg-primary p-8 rounded-xl shadow-premium text-white relative overflow-hidden group">
+
             <div className="absolute top-0 right-0 p-10 opacity-10 group-hover:scale-125 transition-transform">
               <ShieldCheckIcon className="h-32 w-32" />
             </div>
@@ -299,7 +313,8 @@ const CreateUser = () => {
             </p>
           </div>
 
-          <div className="bg-surface p-8 rounded-[2.5rem] border border-border shadow-premium">
+          <div className="bg-surface p-8 rounded-xl border border-border shadow-premium">
+
             <h3 className="text-h-s font-bold text-text-primary mb-6">Onboarding Checklist</h3>
             <ul className="space-y-4">
               {[

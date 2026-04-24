@@ -9,7 +9,15 @@ import {
   CloudArrowUpIcon,
   XMarkIcon,
   SparklesIcon,
+  BanknotesIcon,
+  CalendarIcon,
+  TagIcon,
+  ChatBubbleBottomCenterTextIcon,
+  PencilSquareIcon,
+  ShieldCheckIcon,
+  ArrowRightIcon,
 } from '@heroicons/react/24/outline';
+
 
 const SubmitExpense = () => {
   const dispatch = useDispatch();
@@ -60,19 +68,14 @@ const SubmitExpense = () => {
   };
 
   const processFile = (file) => {
-    // Validate file type
     if (!file.type.startsWith('image/')) {
-      toast.error('Please upload an image file');
+      toast.error('Strategic artifacts must be image-based.');
       return;
     }
-
-    // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      toast.error('File size must be less than 5MB');
+      toast.error('Artifact size exceeds the 5MB corporate threshold.');
       return;
     }
-
-    // Create preview
     const reader = new FileReader();
     reader.onloadend = () => {
       setReceiptPreview(reader.result);
@@ -86,30 +89,24 @@ const SubmitExpense = () => {
 
   const handleOCRScan = async () => {
     if (!formData.receipt) {
-      toast.error('Please upload a receipt first');
+      toast.error('Primary artifact required for OCR optimization.');
       return;
     }
-
     setOcrLoading(true);
-    
-    // Simulate OCR processing (In production, this would call an OCR API like Tesseract.js or Google Vision API)
     setTimeout(() => {
-      // Mock OCR results
       const mockOCRData = {
-        title: 'Business Lunch',
-        description: 'Team lunch at restaurant',
+        title: 'Corporate Strategy Lunch',
+        description: 'Strategic alignment session with departmental leads.',
         amount: '125.50',
         category: 'Food',
         date: new Date().toISOString().split('T')[0],
       };
-
       setFormData((prev) => ({
         ...prev,
         ...mockOCRData,
       }));
-
       setOcrLoading(false);
-      toast.success('Receipt scanned successfully! Please review the details.');
+      toast.success('Artifact synthesized! Please verify the extracted data points.');
     }, 2000);
   };
 
@@ -126,332 +123,325 @@ const SubmitExpense = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Validation
     if (!formData.title.trim()) {
-      toast.error('Please enter a title');
+      toast.error('Record title is mandatory for audit trail.');
       return;
     }
-
     if (!formData.amount || parseFloat(formData.amount) <= 0) {
-      toast.error('Please enter a valid amount');
+      toast.error('Capital impact must be a positive non-zero value.');
       return;
     }
-
     if (!formData.date) {
-      toast.error('Please select a date');
+      toast.error('Timeline marker is required for archival.');
       return;
     }
-
     setLoading(true);
-
     try {
       const expenseData = {
         ...formData,
         amount: parseFloat(formData.amount),
       };
-
       await dispatch(createExpense(expenseData)).unwrap();
-      toast.success('Expense submitted successfully!');
+      toast.success('Capital request successfully integrated into the audit queue!');
       navigate('/dashboard/expenses');
     } catch (error) {
-      toast.error(error.message || 'Failed to submit expense');
+      toast.error(error.message || 'Integration sequence failed.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="bg-white shadow rounded-lg">
-        {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-200">
-          <div className="flex items-center">
-            <DocumentTextIcon className="h-6 w-6 text-teal-600 mr-2" />
-            <h2 className="text-xl font-semibold text-gray-900">
-              Submit New Expense
-            </h2>
+    <div className="max-w-5xl mx-auto animate-in fade-in slide-in-from-bottom-6 duration-700 font-inter">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-6">
+        <div className="flex items-center gap-6">
+          <div className="p-4 bg-primary rounded-xl shadow-premium">
+            <PencilSquareIcon className="h-8 w-8 text-white" />
           </div>
-          <p className="mt-1 text-sm text-gray-500">
-            Fill in the details below or use OCR to scan your receipt
-          </p>
+
+          <div>
+            <h1 className="text-h-xl font-bold text-text-primary tracking-tight italic uppercase">Expenditure Initiation</h1>
+            <p className="text-body text-text-muted opacity-80">
+              Inject a new capital request into the corporate verification matrix.
+            </p>
+          </div>
         </div>
-
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          {/* Receipt Upload Section */}
-          <div className="bg-gradient-to-r from-teal-50 to-blue-50 rounded-lg p-6 border-2 border-dashed border-teal-300">
-            <div className="text-center">
-              <CloudArrowUpIcon className="mx-auto h-12 w-12 text-teal-600" />
-              <h3 className="mt-2 text-sm font-medium text-gray-900">
-                Upload Receipt (Optional)
-              </h3>
-              <p className="mt-1 text-xs text-gray-500">
-                PNG, JPG, GIF up to 5MB
-              </p>
-
-              <div className="mt-4 flex justify-center space-x-4">
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700"
-                >
-                  <CameraIcon className="h-5 w-5 mr-2" />
-                  Choose File
-                </button>
-
-                {receiptPreview && (
-                  <button
-                    type="button"
-                    onClick={handleOCRScan}
-                    disabled={ocrLoading}
-                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400"
-                  >
-                    <SparklesIcon className="h-5 w-5 mr-2" />
-                    {ocrLoading ? 'Scanning...' : 'Scan with OCR'}
-                  </button>
-                )}
-              </div>
-
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleFileSelect}
-                className="hidden"
-              />
-            </div>
-
-            {/* Receipt Preview */}
-            {receiptPreview && (
-              <div className="mt-4 relative">
-                <img
-                  src={receiptPreview}
-                  alt="Receipt preview"
-                  className="mx-auto max-h-64 rounded-lg shadow-lg"
-                />
-                <button
-                  type="button"
-                  onClick={removeReceipt}
-                  className="absolute top-2 right-2 p-1 bg-red-600 text-white rounded-full hover:bg-red-700"
-                >
-                  <XMarkIcon className="h-5 w-5" />
-                </button>
-              </div>
-            )}
-
-            {ocrLoading && (
-              <div className="mt-4 text-center">
-                <div className="inline-flex items-center px-4 py-2 bg-white rounded-lg shadow">
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-purple-600 mr-3"></div>
-                  <span className="text-sm text-gray-700">
-                    Scanning receipt with OCR...
-                  </span>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Form Fields */}
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            {/* Title */}
-            <div className="sm:col-span-2">
-              <label
-                htmlFor="title"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Title <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                name="title"
-                id="title"
-                required
-                value={formData.title}
-                onChange={handleChange}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
-                placeholder="e.g., Client Dinner, Taxi to Airport"
-              />
-            </div>
-
-            {/* Category */}
-            <div>
-              <label
-                htmlFor="category"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Category <span className="text-red-500">*</span>
-              </label>
-              <select
-                name="category"
-                id="category"
-                required
-                value={formData.category}
-                onChange={handleChange}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
-              >
-                {categories.map((category) => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Date */}
-            <div>
-              <label
-                htmlFor="date"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Date <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="date"
-                name="date"
-                id="date"
-                required
-                value={formData.date}
-                onChange={handleChange}
-                max={new Date().toISOString().split('T')[0]}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
-              />
-            </div>
-
-            {/* Amount */}
-            <div>
-              <label
-                htmlFor="amount"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Amount <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="number"
-                name="amount"
-                id="amount"
-                required
-                step="0.01"
-                min="0"
-                value={formData.amount}
-                onChange={handleChange}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
-                placeholder="0.00"
-              />
-            </div>
-
-            {/* Currency */}
-            <div>
-              <label
-                htmlFor="currency"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Currency <span className="text-red-500">*</span>
-              </label>
-              <select
-                name="currency"
-                id="currency"
-                required
-                value={formData.currency}
-                onChange={handleChange}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
-              >
-                {currencies.map((currency) => (
-                  <option key={currency} value={currency}>
-                    {currency}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Description */}
-            <div className="sm:col-span-2">
-              <label
-                htmlFor="description"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Description
-              </label>
-              <textarea
-                name="description"
-                id="description"
-                rows={3}
-                value={formData.description}
-                onChange={handleChange}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
-                placeholder="Provide additional details about this expense..."
-              />
-            </div>
-
-            {/* Notes */}
-            <div className="sm:col-span-2">
-              <label
-                htmlFor="notes"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Additional Notes
-              </label>
-              <textarea
-                name="notes"
-                id="notes"
-                rows={2}
-                value={formData.notes}
-                onChange={handleChange}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
-                placeholder="Any additional information..."
-              />
-            </div>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex items-center justify-end space-x-4 pt-4 border-t border-gray-200">
-            <button
-              type="button"
-              onClick={() => navigate('/dashboard/expenses')}
-              className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:bg-gray-400"
-            >
-              {loading ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Submitting...
-                </>
-              ) : (
-                <>
-                  <DocumentTextIcon className="h-5 w-5 mr-2" />
-                  Submit Expense
-                </>
-              )}
-            </button>
-          </div>
-        </form>
       </div>
 
-      {/* Info Box */}
-      <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <div className="flex">
-          <div className="flex-shrink-0">
-            <SparklesIcon className="h-5 w-5 text-blue-600" />
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        {/* Main Form Area */}
+        <div className="lg:col-span-8">
+          <div className="bg-surface rounded-xl border border-border shadow-massive overflow-hidden">
+
+            <form onSubmit={handleSubmit} className="p-10 space-y-10">
+              
+              {/* Receipt Upload Matrix */}
+              <div className="relative group">
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-primary to-accent rounded-xl blur opacity-10 group-hover:opacity-20 transition duration-1000 group-hover:duration-200"></div>
+                <div className={`relative bg-secondary/30 rounded-xl p-10 border-2 border-dashed transition-all duration-500 ${receiptPreview ? 'border-primary/40 bg-primary/5' : 'border-border hover:border-accent/40'}`}>
+
+                  {!receiptPreview ? (
+                    <div className="text-center">
+                      <div className="w-20 h-20 bg-surface rounded-xl flex items-center justify-center mx-auto mb-6 shadow-premium">
+                        <CloudArrowUpIcon className="h-10 w-10 text-accent" />
+                      </div>
+
+                      <h3 className="text-lg font-black text-text-primary tracking-tight uppercase italic">Audit Artifact</h3>
+                      <p className="mt-2 text-xs text-text-muted font-bold tracking-widest uppercase opacity-60">
+                        PNG, JPG or PDF up to 5MB
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="mt-8 inline-flex items-center px-8 py-4 bg-surface text-text-primary border border-border rounded-xl font-black uppercase text-xs tracking-widest hover:bg-secondary hover:border-accent/40 transition-all shadow-sm"
+                      >
+
+                        <CameraIcon className="h-5 w-5 mr-3 text-accent" />
+                        Select Artifact
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="relative">
+                      <img
+                        src={receiptPreview}
+                        alt="Audit Preview"
+                        className="mx-auto max-h-[400px] rounded-xl shadow-massive border-4 border-surface"
+                      />
+
+                      <button
+                        type="button"
+                        onClick={removeReceipt}
+                        className="absolute -top-4 -right-4 p-3 bg-error text-white rounded-xl hover:scale-110 transition-transform shadow-premium"
+                      >
+
+                        <XMarkIcon className="h-6 w-6" />
+                      </button>
+                      <div className="mt-8 flex justify-center">
+                        <button
+                          type="button"
+                          onClick={handleOCRScan}
+                          disabled={ocrLoading}
+                          className="inline-flex items-center px-8 py-4 bg-slate-900 text-white rounded-xl font-black uppercase text-xs tracking-widest hover:bg-black disabled:opacity-50 shadow-massive group"
+                        >
+                          <SparklesIcon className={`h-5 w-5 mr-3 text-accent ${ocrLoading ? 'animate-pulse' : 'group-hover:rotate-12'}`} />
+                          {ocrLoading ? 'Synthesizing...' : 'Optimize via OCR'}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileSelect}
+                    className="hidden"
+                  />
+                </div>
+              </div>
+
+              {/* Data Input Grid */}
+              <div className="space-y-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="md:col-span-2 space-y-3">
+                    <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Request Identification</label>
+                    <div className="relative group">
+                      <DocumentTextIcon className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted group-focus-within:text-accent transition-colors" />
+                      <input
+                        type="text"
+                        name="title"
+                        required
+                        value={formData.title}
+                        onChange={handleChange}
+                        className="w-full pl-16 pr-6 py-5 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-bold text-text-primary placeholder:text-text-muted/40"
+                        placeholder="Define the expenditure objective..."
+
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Business Domain</label>
+                    <div className="relative group">
+                      <TagIcon className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted group-focus-within:text-primary transition-colors" />
+                      <select
+                        name="category"
+                        required
+                        value={formData.category}
+                        onChange={handleChange}
+                        className="w-full pl-16 pr-10 py-5 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-bold text-text-primary appearance-none cursor-pointer"
+                      >
+
+                        {categories.map((cat) => (
+                          <option key={cat} value={cat}>{cat}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Timeline Marker</label>
+                    <div className="relative group">
+                      <CalendarIcon className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted group-focus-within:text-primary transition-colors" />
+                      <input
+                        type="date"
+                        name="date"
+                        required
+                        value={formData.date}
+                        onChange={handleChange}
+                        max={new Date().toISOString().split('T')[0]}
+                        className="w-full pl-16 pr-6 py-5 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-bold text-text-primary cursor-pointer"
+                      />
+
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Capital Impact</label>
+                    <div className="relative group">
+                      <BanknotesIcon className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted group-focus-within:text-accent transition-colors" />
+                      <input
+                        type="number"
+                        name="amount"
+                        required
+                        step="0.01"
+                        min="0"
+                        value={formData.amount}
+                        onChange={handleChange}
+                        className="w-full pl-16 pr-6 py-5 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-bold text-text-primary placeholder:text-text-muted/40"
+                        placeholder="0.00"
+                      />
+
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Currency Unit</label>
+                    <div className="relative group">
+                      <div className="absolute left-6 top-1/2 -translate-y-1/2 font-black text-text-muted group-focus-within:text-primary transition-colors">$</div>
+                      <select
+                        name="currency"
+                        required
+                        value={formData.currency}
+                        onChange={handleChange}
+                        className="w-full pl-16 pr-10 py-5 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-bold text-text-primary appearance-none cursor-pointer"
+                      >
+
+                        {currencies.map((cur) => (
+                          <option key={cur} value={cur}>{cur}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="md:col-span-2 space-y-3">
+                    <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Strategic Rationale</label>
+                    <div className="relative group">
+                      <ChatBubbleBottomCenterTextIcon className="absolute left-6 top-6 h-5 w-5 text-text-muted group-focus-within:text-primary transition-colors" />
+                      <textarea
+                        name="description"
+                        rows={3}
+                        value={formData.description}
+                        onChange={handleChange}
+                        className="w-full pl-16 pr-6 py-5 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-bold text-text-primary placeholder:text-text-muted/40 italic"
+                        placeholder="Provide detailed strategic justification..."
+                      />
+
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-end gap-4 pt-10 border-t border-border">
+                  <button
+                    type="button"
+                    onClick={() => navigate('/dashboard/expenses')}
+                    className="px-8 py-5 bg-surface text-text-primary border border-border rounded-xl font-black uppercase text-xs tracking-widest hover:bg-secondary transition-all"
+                  >
+
+                    Abort Request
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="flex-1 md:flex-none inline-flex items-center justify-center px-12 py-5 bg-primary text-white rounded-xl font-black uppercase text-xs tracking-widest hover:bg-slate-800 disabled:opacity-50 shadow-premium hover:scale-105 transition-all group"
+                  >
+
+                    {loading ? (
+                      <div className="animate-spin rounded-full h-5 w-5 border-2 border-white/30 border-t-white"></div>
+                    ) : (
+                      <>
+                        Inject Request
+                        <ArrowRightIcon className="h-5 w-5 ml-3 group-hover:translate-x-2 transition-transform" />
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </form>
           </div>
-          <div className="ml-3">
-            <h3 className="text-sm font-medium text-blue-800">
-              OCR Feature (Beta)
-            </h3>
-            <div className="mt-2 text-sm text-blue-700">
-              <p>
-                Upload a receipt image and click "Scan with OCR" to automatically
-                extract expense details. This feature uses optical character
-                recognition to read text from your receipts.
-              </p>
-              <p className="mt-2">
-                <strong>Note:</strong> Always review the extracted information for
-                accuracy before submitting.
-              </p>
+        </div>
+
+        {/* Sidebar Info Area */}
+        <div className="lg:col-span-4 space-y-8">
+          <div className="bg-slate-900 p-8 rounded-xl border border-white/5 shadow-massive relative overflow-hidden text-white">
+
+            <div className="absolute top-0 right-0 p-8 opacity-10">
+              <ShieldCheckIcon className="h-32 w-32" />
+            </div>
+            <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-3 bg-accent/20 rounded-xl">
+                  <SparklesIcon className="h-6 w-6 text-accent" />
+                </div>
+                <h3 className="text-h-m font-black italic uppercase tracking-tighter">OCR Synthesis</h3>
+              </div>
+              <div className="space-y-4">
+                <p className="text-sm font-medium text-slate-300 leading-relaxed italic">
+                  Upload your verification artifact to enable our neural extraction engine.
+                </p>
+                <ul className="space-y-3">
+                  {[
+                    'Automated capital extraction',
+                    'Strategic domain identification',
+                    'Temporal marker synchronization',
+                    'Rationalization suggestion'
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                      <div className="w-1.5 h-1.5 rounded-full bg-accent"></div>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="mt-8 p-4 bg-white/5 rounded-xl border border-white/10 text-[10px] font-bold italic text-slate-400">
+
+                Strategic Intelligence Note: Manual verification is mandatory before final injection.
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-surface p-10 rounded-xl border border-border shadow-premium group hover:border-primary/30 transition-all">
+
+            <h4 className="text-xs font-black text-text-muted uppercase tracking-[0.2em] mb-4">Investment Governance</h4>
+            <div className="space-y-6">
+              <div className="flex items-start gap-4">
+                <div className="p-2 bg-secondary rounded-lg">
+                  <DocumentTextIcon className="h-5 w-5 text-primary" />
+                </div>
+                <p className="text-xs text-text-muted font-medium italic leading-relaxed">
+                  Every request must be accompanied by a valid corporate justification artifact.
+                </p>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="p-2 bg-secondary rounded-lg">
+                  <CalendarIcon className="h-5 w-5 text-accent" />
+                </div>
+                <p className="text-xs text-text-muted font-medium italic leading-relaxed">
+                  Timeline markers must reflect the actual date of capital impact.
+                </p>
+              </div>
             </div>
           </div>
         </div>

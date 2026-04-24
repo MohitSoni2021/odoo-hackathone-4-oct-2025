@@ -111,7 +111,8 @@ const UserModal = ({ isOpen, onClose }) => {
       ></div>
 
       {/* Modal Container */}
-      <div className="relative bg-surface w-full max-w-xl rounded-[2.5rem] shadow-premium-lg overflow-hidden animate-in zoom-in duration-300 border border-border">
+      <div className="relative bg-surface w-full max-w-xl rounded-xl shadow-premium-lg overflow-hidden animate-in zoom-in duration-300 border border-border">
+
         {/* Header */}
         <div className="px-10 py-8 bg-secondary/30 border-b border-border flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -147,9 +148,10 @@ const UserModal = ({ isOpen, onClose }) => {
                 value={formData.firstName}
                 onChange={handleChange}
                 required
-                className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium"
+                className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium"
                 placeholder="John"
               />
+
             </div>
 
             {/* Last Name */}
@@ -163,9 +165,10 @@ const UserModal = ({ isOpen, onClose }) => {
                 value={formData.lastName}
                 onChange={handleChange}
                 required
-                className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium"
+                className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium"
                 placeholder="Doe"
               />
+
             </div>
           </div>
 
@@ -181,9 +184,10 @@ const UserModal = ({ isOpen, onClose }) => {
               onChange={handleChange}
               required
               disabled={!!selectedUser}
-              className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               placeholder="john.doe@company.com"
             />
+
           </div>
 
           {/* Password */}
@@ -197,9 +201,10 @@ const UserModal = ({ isOpen, onClose }) => {
               value={formData.password}
               onChange={handleChange}
               required={!selectedUser}
-              className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium"
+              className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium"
               placeholder={selectedUser ? '••••••••' : 'Set complex password'}
             />
+
             <p className="text-[10px] text-text-muted/60 ml-1 font-medium tracking-wide italic">
               {selectedUser ? 'Leave blank to keep existing password.' : 'Minimum 8 characters required.'}
             </p>
@@ -216,8 +221,9 @@ const UserModal = ({ isOpen, onClose }) => {
                 value={formData.role}
                 onChange={handleChange}
                 required
-                className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium appearance-none cursor-pointer"
+                className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium appearance-none cursor-pointer"
               >
+
                 <option value="employee">Employee</option>
                 <option value="manager">Manager</option>
                 <option value="admin">Admin</option>
@@ -234,8 +240,9 @@ const UserModal = ({ isOpen, onClose }) => {
                 value={formData.country}
                 onChange={handleChange}
                 required
-                className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium appearance-none cursor-pointer"
+                className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium appearance-none cursor-pointer"
               >
+
                 {countries.map((country) => (
                   <option key={country} value={country}>{country}</option>
                 ))}
@@ -253,8 +260,9 @@ const UserModal = ({ isOpen, onClose }) => {
                 name="manager"
                 value={formData.manager}
                 onChange={handleChange}
-                className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-2xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium appearance-none cursor-pointer"
+                className="w-full px-5 py-4 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all font-medium appearance-none cursor-pointer"
               >
+
                 <option value="">No Manager Assigned</option>
                 {managers.map((manager) => (
                   <option key={manager._id} value={manager._id}>
@@ -266,7 +274,8 @@ const UserModal = ({ isOpen, onClose }) => {
           )}
 
           {/* Active Status */}
-          <div className="flex items-center justify-between p-5 bg-secondary/30 rounded-2xl border border-border">
+          <div className="flex items-center justify-between p-5 bg-secondary/30 rounded-xl border border-border">
+
             <div className="flex items-center gap-3">
               <div className={`w-3 h-3 rounded-full ${formData.isActive ? 'bg-success' : 'bg-text-muted/30'}`}></div>
               <span className="text-body font-bold text-text-primary">Enable User Access</span>
@@ -289,15 +298,17 @@ const UserModal = ({ isOpen, onClose }) => {
               type="button"
               onClick={onClose}
               disabled={loading}
-              className="flex-1 py-4 text-body font-bold text-text-muted bg-secondary hover:bg-border rounded-2xl transition-all active:scale-95"
+              className="flex-1 py-4 text-body font-bold text-text-muted bg-secondary hover:bg-border rounded-xl transition-all active:scale-95"
             >
+
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex-[2] py-4 text-body font-bold text-white bg-accent hover:bg-accent-dark rounded-2xl shadow-premium transition-all active:scale-95 disabled:opacity-50"
+              className="flex-[2] py-4 text-body font-bold text-white bg-accent hover:bg-accent-dark rounded-xl shadow-premium transition-all active:scale-95 disabled:opacity-50"
             >
+
               {loading ? 'Processing...' : selectedUser ? 'Save Changes' : 'Complete Onboarding'}
             </button>
           </div>

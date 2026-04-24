@@ -11,9 +11,14 @@ import {
   XCircleIcon,
   ClockIcon,
   UsersIcon,
-  CurrencyDollarIcon,
+  BanknotesIcon,
   ChartBarIcon,
-  ArrowDownTrayIcon
+  ArrowDownTrayIcon,
+  ShieldCheckIcon,
+  BoltIcon,
+  PresentationChartBarIcon,
+  ScaleIcon,
+  CurrencyDollarIcon,
 } from '@heroicons/react/24/outline';
 import { useCurrency } from '../../hooks/useCurrency';
 import api from '../../services/api';
@@ -41,9 +46,7 @@ const ManagerAnalytics = () => {
   };
 
   const downloadReport = (type) => {
-    // Prepare CSV data
     let csvContent = '';
-    
     if (type === 'monthly') {
       csvContent = 'Month,Year,Total Amount,Count\n';
       analytics.monthlyTrends.forEach(item => {
@@ -60,48 +63,38 @@ const ManagerAnalytics = () => {
         csvContent += `${item._id.firstName} ${item._id.lastName},${item._id.email},${item.totalAmount},${item.count}\n`;
       });
     }
-
-    // Download
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${type}-report-${new Date().toISOString().split('T')[0]}.csv`;
+    a.download = `audit-${type}-report-${new Date().toISOString().split('T')[0]}.csv`;
     a.click();
   };
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div>
+      <div className="flex flex-col items-center justify-center h-[60vh] animate-pulse font-inter">
+        <div className="w-20 h-20 border-4 border-slate-200 border-t-accent rounded-full animate-spin mb-8 shadow-massive"></div>
+        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 italic">Calculating Strategic Impact Matrix...</p>
       </div>
     );
   }
 
-  if (!analytics) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-gray-500">No analytics data available</p>
-      </div>
-    );
-  }
+  if (!analytics) return null;
 
-  const COLORS = ['#14B8A6', '#0EA5E9', '#8B5CF6', '#F59E0B', '#EF4444', '#10B981'];
+  const CHART_COLORS = ['#1E293B', '#FF6B3D', '#3B82F6', '#22C55E', '#F59E0B', '#EF4444'];
 
-  // Prepare monthly trends data
   const monthlyData = analytics.monthlyTrends.map(item => ({
     name: `${item._id.month}/${item._id.year}`,
     amount: item.totalAmount,
     count: item.count
   }));
 
-  // Prepare category data for pie chart
   const categoryData = analytics.categoryBreakdown.map(item => ({
     name: item._id,
     value: item.totalAmount
   }));
 
-  // Prepare top employees data
   const employeeData = analytics.topEmployees.slice(0, 10).map(item => ({
     name: `${item._id.firstName} ${item._id.lastName}`,
     amount: item.totalAmount,
@@ -109,401 +102,270 @@ const ManagerAnalytics = () => {
   }));
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-teal-600 to-teal-700 rounded-lg shadow-lg p-6 text-white">
-        <h1 className="text-3xl font-bold">Team Analytics Dashboard 📊</h1>
-        <p className="mt-2 text-teal-100">
-          Comprehensive insights into your team's expense patterns and trends
-        </p>
-      </div>
-
-      {/* 1. Team Spending Overview */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Team Spending Overview</h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-gradient-to-br from-teal-50 to-teal-100 rounded-lg p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-teal-600 font-medium">Current Month</p>
-                <p className="text-2xl font-bold text-teal-900">
-                  ${analytics.teamOverview.currentMonth.total.toLocaleString()}
-                </p>
-                <p className="text-xs text-teal-600 mt-1">
-                  {analytics.teamOverview.currentMonth.count} expenses
-                </p>
-              </div>
-              <CurrencyDollarIcon className="h-10 w-10 text-teal-600" />
-            </div>
+    <div className="animate-in fade-in slide-in-from-bottom-6 duration-1000 font-inter space-y-12">
+      
+      {/* Premium Analytics Header */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-10">
+        <div className="flex items-center gap-8">
+          <div className="w-20 h-20 bg-slate-900 rounded-xl flex items-center justify-center shadow-massive transform hover:rotate-6 transition-transform">
+            <PresentationChartBarIcon className="h-10 w-10 text-accent" />
           </div>
 
-          <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-blue-600 font-medium">Previous Month</p>
-                <p className="text-2xl font-bold text-blue-900">
-                  ${analytics.teamOverview.previousMonth.total.toLocaleString()}
-                </p>
-                <p className="text-xs text-blue-600 mt-1">
-                  {analytics.teamOverview.previousMonth.count} expenses
-                </p>
-              </div>
-              <DocumentTextIcon className="h-10 w-10 text-blue-600" />
-            </div>
-          </div>
-
-          <div className={`bg-gradient-to-br ${
-            analytics.teamOverview.percentageChange >= 0 
-              ? 'from-red-50 to-red-100' 
-              : 'from-green-50 to-green-100'
-          } rounded-lg p-4`}>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className={`text-sm font-medium ${
-                  analytics.teamOverview.percentageChange >= 0 
-                    ? 'text-red-600' 
-                    : 'text-green-600'
-                }`}>
-                  Change
-                </p>
-                <p className={`text-2xl font-bold ${
-                  analytics.teamOverview.percentageChange >= 0 
-                    ? 'text-red-900' 
-                    : 'text-green-900'
-                }`}>
-                  {analytics.teamOverview.percentageChange >= 0 ? '+' : ''}
-                  {analytics.teamOverview.percentageChange}%
-                </p>
-                <p className={`text-xs mt-1 ${
-                  analytics.teamOverview.percentageChange >= 0 
-                    ? 'text-red-600' 
-                    : 'text-green-600'
-                }`}>
-                  vs last month
-                </p>
-              </div>
-              {analytics.teamOverview.percentageChange >= 0 ? (
-                <ArrowTrendingUpIcon className="h-10 w-10 text-red-600" />
-              ) : (
-                <ArrowTrendingDownIcon className="h-10 w-10 text-green-600" />
-              )}
-            </div>
-          </div>
-
-          <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-purple-600 font-medium">Team Size</p>
-                <p className="text-2xl font-bold text-purple-900">
-                  {analytics.totalStats.teamSize}
-                </p>
-                <p className="text-xs text-purple-600 mt-1">
-                  team members
-                </p>
-              </div>
-              <UsersIcon className="h-10 w-10 text-purple-600" />
-            </div>
+          <div>
+            <h1 className="text-h-xl font-black text-text-primary tracking-tighter italic uppercase">Divisional Intelligence</h1>
+            <p className="text-body text-text-muted font-medium opacity-70">
+              Corporate performance metrics and capital distribution analysis.
+            </p>
           </div>
         </div>
-
-        {/* Status Breakdown */}
-        <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-          {analytics.teamOverview.statusBreakdown.map((status) => (
-            <div key={status._id} className="bg-gray-50 rounded-lg p-3">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-gray-600 capitalize">{status._id}</p>
-                  <p className="text-lg font-bold text-gray-900">{status.count}</p>
-                  <p className="text-xs text-gray-500">
-                    ${status.totalAmount.toLocaleString()}
-                  </p>
-                </div>
-                {status._id === 'approved' && <CheckCircleIcon className="h-6 w-6 text-green-500" />}
-                {status._id === 'rejected' && <XCircleIcon className="h-6 w-6 text-red-500" />}
-                {status._id === 'pending' && <ClockIcon className="h-6 w-6 text-yellow-500" />}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* 2. Monthly Trends */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-gray-900">Monthly Trends (Last 12 Months)</h2>
+        <div className="flex items-center gap-4">
           <button
             onClick={() => downloadReport('monthly')}
-            className="flex items-center px-3 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 text-sm"
+            className="flex items-center px-8 py-4 bg-slate-900 text-white rounded-xl font-black uppercase text-[10px] tracking-widest hover:bg-accent transition-all shadow-massive group"
           >
-            <ArrowDownTrayIcon className="h-4 w-4 mr-2" />
-            Export CSV
+            <ArrowDownTrayIcon className="h-4 w-4 mr-3 text-accent group-hover:text-white transition-colors" />
+            Audit Protocol Export
           </button>
+
         </div>
-        <ResponsiveContainer width="100%" height={300}>
-          <AreaChart data={monthlyData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Area 
-              type="monotone" 
-              dataKey="amount" 
-              stroke="#14B8A6" 
-              fill="#14B8A6" 
-              fillOpacity={0.6}
-              name="Total Amount ($)"
-            />
-          </AreaChart>
-        </ResponsiveContainer>
       </div>
 
-      {/* 3. Category-wise Breakdown */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-gray-900">Category Breakdown</h2>
-            <button
-              onClick={() => downloadReport('category')}
-              className="flex items-center px-3 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 text-sm"
-            >
-              <ArrowDownTrayIcon className="h-4 w-4 mr-2" />
-              Export
-            </button>
+      {/* Strategic Overview Matrix */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        {[
+          { label: 'Current Velocity', value: `$${analytics.teamOverview.currentMonth.total.toLocaleString()}`, sub: `${analytics.teamOverview.currentMonth.count} Submissions`, icon: BoltIcon, color: 'primary' },
+          { label: 'Impact Variance', value: `${Math.abs(analytics.teamOverview.percentageChange)}%`, sub: 'vs previous audit cycle', icon: analytics.teamOverview.percentageChange >= 0 ? ArrowTrendingUpIcon : ArrowTrendingDownIcon, color: analytics.teamOverview.percentageChange >= 0 ? 'error' : 'success', trend: true },
+          { label: 'Personnel Scope', value: analytics.totalStats.teamSize, sub: 'Active Division Nodes', icon: UsersIcon, color: 'info' },
+          { label: 'Avg Validation', value: `${analytics.approvalQueue.avgApprovalTimeHours}h`, sub: 'Optimization target: 12h', icon: ShieldCheckIcon, color: 'accent', dark: true },
+        ].map((stat) => (
+          <div key={stat.label} className={`${stat.dark ? 'bg-slate-900 text-white border-white/5 shadow-massive' : 'bg-surface text-text-primary border-border shadow-premium'} p-8 rounded-xl border group hover:shadow-massive transition-all relative overflow-hidden`}>
+            <div className={`absolute top-0 right-0 p-6 opacity-5 group-hover:scale-125 transition-transform duration-700 pointer-events-none ${stat.dark ? 'text-white' : 'text-slate-900'}`}>
+              <stat.icon className="h-20 w-20" />
+            </div>
+
+            <div className={`text-[10px] font-black uppercase tracking-[0.2em] mb-3 opacity-60 italic ${stat.dark ? 'text-accent' : 'text-text-muted'}`}>{stat.label}</div>
+            <div className={`text-4xl font-black tracking-tighter italic flex items-center gap-2 ${stat.trend ? (analytics.teamOverview.percentageChange >= 0 ? 'text-error' : 'text-success') : ''}`}>
+              {stat.trend && <stat.icon className="h-8 w-8 stroke-[3]" />}
+              {stat.value}
+            </div>
+            <div className={`mt-5 text-[10px] font-black uppercase tracking-widest italic opacity-60 ${stat.dark ? 'text-slate-400' : 'text-text-muted'}`}>{stat.sub}</div>
           </div>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={categoryData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {categoryData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
+        ))}
+      </div>
+
+      {/* Analytical Data Clusters */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        
+        {/* Trend Analysis Frame */}
+        <div className="lg:col-span-8 bg-surface rounded-[2.5rem] border border-border shadow-massive p-10 relative overflow-hidden group">
+          <div className="flex items-center justify-between mb-12 relative z-10">
+            <div>
+              <h3 className="text-xl font-black text-text-primary uppercase tracking-tighter italic">Capital Outlay Dynamics</h3>
+              <p className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] mt-1 opacity-60">Trailing 12-Month Expenditure Sequence</p>
+            </div>
+            <div className="flex items-center gap-3 bg-secondary/30 px-4 py-2 rounded-xl">
+              <div className="w-2.5 h-2.5 rounded-full bg-slate-900 shadow-massive"></div>
+
+              <span className="text-[10px] font-black text-text-primary uppercase tracking-widest italic">Global Vault Value</span>
+            </div>
+          </div>
+          <div className="h-[450px] relative z-10">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={monthlyData}>
+                <defs>
+                  <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#1E293B" stopOpacity={0.15}/>
+                    <stop offset="95%" stopColor="#1E293B" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" opacity={0.5} />
+                <XAxis 
+                  dataKey="name" 
+                  axisLine={false} 
+                  tickLine={false} 
+                  tick={{fill: '#64748B', fontSize: 10, fontWeight: 900, textTransform: 'uppercase'}} 
+                  dy={15}
+                />
+                <YAxis 
+                  axisLine={false} 
+                  tickLine={false} 
+                  tick={{fill: '#64748B', fontSize: 10, fontWeight: 900}} 
+                  dx={-10}
+                />
+                <Tooltip 
+                  contentStyle={{backgroundColor: '#1E293B', borderRadius: '20px', border: 'none', boxShadow: '0 25px 50px -12px rgb(0 0 0 / 0.5)', padding: '20px'}}
+                  itemStyle={{fontSize: '12px', fontWeight: 900, textTransform: 'uppercase', color: '#FFFFFF'}}
+                  labelStyle={{fontSize: '10px', fontWeight: 900, color: '#FF6B3D', marginBottom: '8px', letterSpacing: '0.1em', textTransform: 'uppercase'}}
+                  cursor={{ stroke: '#FF6B3D', strokeWidth: 2, strokeDasharray: '5 5' }}
+                />
+                <Area 
+                  type="monotone" 
+                  dataKey="amount" 
+                  stroke="#1E293B" 
+                  strokeWidth={5}
+                  fillOpacity={1} 
+                  fill="url(#colorAmount)" 
+                  name="CAPITAL FLOW"
+                  animationDuration={2000}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
         </div>
 
-        {/* Category List */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Top Categories</h2>
-          <div className="space-y-3">
-            {analytics.categoryBreakdown.slice(0, 6).map((category, index) => (
-              <div key={category._id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <div className="flex items-center space-x-3">
-                  <div 
-                    className="w-4 h-4 rounded-full" 
-                    style={{ backgroundColor: COLORS[index % COLORS.length] }}
-                  ></div>
-                  <div>
-                    <p className="font-medium text-gray-900">{category._id}</p>
-                    <p className="text-xs text-gray-500">{category.count} expenses</p>
-                  </div>
+        {/* Domain Allocation Frame */}
+        <div className="lg:col-span-4 bg-surface rounded-xl border border-border shadow-massive p-10 flex flex-col group">
+          <div className="mb-12">
+            <h3 className="text-xl font-black text-text-primary uppercase tracking-tighter italic">Domain Distribution</h3>
+            <p className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] mt-1 opacity-60">Capital Allocation by Sector</p>
+          </div>
+
+          
+          <div className="h-[280px] relative mb-12">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={categoryData}
+                  innerRadius={75}
+                  outerRadius={100}
+                  paddingAngle={8}
+                  dataKey="value"
+                  animationDuration={1500}
+                >
+                  {categoryData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} stroke="none" className="hover:opacity-80 transition-opacity cursor-pointer shadow-massive" />
+                  ))}
+                </Pie>
+                <Tooltip 
+                   contentStyle={{backgroundColor: '#1E293B', borderRadius: '16px', border: 'none', color: '#FFF'}}
+                   itemStyle={{fontSize: '10px', fontWeight: 900, textTransform: 'uppercase'}}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="text-center">
+                <div className="text-[8px] font-black text-text-muted uppercase tracking-[0.3em] mb-1">Global Share</div>
+                <div className="text-3xl font-black text-text-primary uppercase tracking-tighter italic">100%</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4 flex-1">
+            {categoryData.slice(0, 5).map((category, index) => (
+              <div key={category.name} className="flex items-center justify-between p-4 bg-secondary/30 rounded-xl border border-transparent hover:border-border group/cat transition-all duration-300">
+
+                <div className="flex items-center gap-4">
+                  <div className="w-3 h-3 rounded-full shadow-inner" style={{ backgroundColor: CHART_COLORS[index % CHART_COLORS.length] }}></div>
+                  <span className="text-[11px] font-black text-text-primary uppercase tracking-tight truncate max-w-[140px] italic">{category.name}</span>
                 </div>
-                <p className="font-bold text-gray-900">
-                  ${category.totalAmount.toLocaleString()}
-                </p>
+                <span className="text-sm font-black text-text-primary tracking-tighter italic">${category.value.toLocaleString()}</span>
               </div>
             ))}
           </div>
         </div>
+
       </div>
 
-      {/* 4. Top Employees by Expenses */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-gray-900">Top Employees by Spending</h2>
+      {/* Personnel Expenditure Framework */}
+      <div className="bg-surface rounded-xl border border-border shadow-massive overflow-hidden group">
+
+        <div className="p-10 border-b border-border flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="flex items-center gap-6">
+             <div className="p-4 bg-accent/10 rounded-xl text-accent">
+               <ScaleIcon className="h-6 w-6" />
+             </div>
+
+             <div>
+              <h3 className="text-xl font-black text-text-primary uppercase tracking-tighter italic">Operative Expenditure Index</h3>
+              <p className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] mt-1 opacity-60">Top 10 High-Impact Asset Controllers</p>
+            </div>
+          </div>
           <button
-            onClick={() => downloadReport('employee')}
-            className="flex items-center px-3 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 text-sm"
+             onClick={() => downloadReport('employee')}
+             className="w-14 h-14 bg-slate-900 rounded-xl text-accent hover:bg-accent hover:text-white transition-all flex items-center justify-center shadow-massive group/dl"
           >
-            <ArrowDownTrayIcon className="h-4 w-4 mr-2" />
-            Export CSV
+
+            <ArrowDownTrayIcon className="h-6 w-6 group-hover/dl:scale-110 transition-transform" />
           </button>
         </div>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={employeeData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="amount" fill="#14B8A6" name="Total Amount ($)" />
-          </BarChart>
-        </ResponsiveContainer>
+        <div className="p-10">
+          <div className="h-[400px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={employeeData} layout="vertical" margin={{ left: 20, right: 40, top: 20, bottom: 20 }}>
+                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#E2E8F0" opacity={0.5} />
+                <XAxis type="number" hide />
+                <YAxis 
+                  dataKey="name" 
+                  type="category" 
+                  axisLine={false} 
+                  tickLine={false} 
+                  tick={{fill: '#0F172A', fontSize: 11, fontWeight: 900, textTransform: 'uppercase'}} 
+                  width={180}
+                />
+                <Tooltip 
+                   cursor={{fill: '#F8FAFC', opacity: 0.5}}
+                   contentStyle={{backgroundColor: '#1E293B', borderRadius: '12px', border: 'none', color: '#FFF'}}
+                   itemStyle={{fontSize: '11px', fontWeight: 900, textTransform: 'uppercase'}}
+                />
+                <Bar 
+                  dataKey="amount" 
+                  fill="#FF6B3D" 
+                  radius={[0, 16, 16, 0]} 
+                  barSize={32}
+                  name="LIABILITY EXPOSURE ($)"
+                  animationDuration={2000}
+                >
+                   {employeeData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={index === 0 ? '#1E293B' : '#FF6B3D'} className="hover:opacity-80 transition-opacity cursor-pointer shadow-massive" />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
       </div>
 
-      {/* 5. Approval Queue Status */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Approval Queue</h2>
-          <div className="space-y-4">
-            <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-yellow-800">Pending Approvals</p>
-                  <p className="text-3xl font-bold text-yellow-900 mt-1">
-                    {analytics.approvalQueue.pendingCount}
-                  </p>
-                </div>
-                <ClockIcon className="h-12 w-12 text-yellow-500" />
-              </div>
+      {/* Executive Impact Synthesis */}
+      <div className="bg-slate-900 rounded-xl p-12 text-white relative overflow-hidden shadow-massive group">
+
+        <div className="absolute top-0 right-0 w-full h-full bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none"></div>
+        <div className="absolute -bottom-20 -right-20 p-20 opacity-5 group-hover:opacity-10 group-hover:scale-110 transition-all duration-1000">
+          <ShieldCheckIcon className="h-96 w-96" />
+        </div>
+        <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-16 text-center md:text-left">
+          <div className="space-y-5">
+            <h4 className="text-[10px] font-black text-accent uppercase tracking-[0.4em] italic opacity-80 flex items-center justify-center md:justify-start gap-3">
+              <CurrencyDollarIcon className="h-4 w-4" />
+              Aggregate Liquidity
+            </h4>
+            <div className="text-6xl font-black italic tracking-tighter uppercase">
+               ${analytics.totalStats.totalAmount.toLocaleString()}
             </div>
-
-            <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-blue-800">Avg. Approval Time</p>
-                  <p className="text-3xl font-bold text-blue-900 mt-1">
-                    {analytics.approvalQueue.avgApprovalTimeHours}h
-                  </p>
-                </div>
-                <ChartBarIcon className="h-12 w-12 text-blue-500" />
-              </div>
+            <p className="text-xs font-bold text-slate-400 italic leading-relaxed max-w-[240px] mx-auto md:mx-0 opacity-60 uppercase tracking-widest">Global divisional outlay across all secure archives.</p>
+          </div>
+          <div className="space-y-5 border-white/10 md:border-x md:px-16">
+            <h4 className="text-[10px] font-black text-accent uppercase tracking-[0.4em] italic opacity-80 flex items-center justify-center md:justify-start gap-3">
+              <DocumentTextIcon className="h-4 w-4" />
+              Artifact volume
+            </h4>
+            <div className="text-6xl font-black italic tracking-tighter uppercase">
+               {analytics.totalStats.totalCount}
             </div>
+            <p className="text-xs font-bold text-slate-400 italic leading-relaxed max-w-[240px] mx-auto md:mx-0 opacity-60 uppercase tracking-widest">Total validated data artifacts in corporate vault.</p>
           </div>
-        </div>
-
-        {/* 7. Currency Insights */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Currency Breakdown</h2>
-          <div className="space-y-3">
-            {analytics.currencyBreakdown.map((currency, index) => (
-              <div key={currency._id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center">
-                    <span className="text-sm font-bold text-teal-700">{currency._id}</span>
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-900">{currency._id}</p>
-                    <p className="text-xs text-gray-500">{currency.count} expenses</p>
-                  </div>
-                </div>
-                <p className="font-bold text-gray-900">
-                  {currency._id} {currency.totalAmount.toLocaleString()}
-                </p>
-              </div>
-            ))}
+          <div className="space-y-5">
+            <h4 className="text-[10px] font-black text-accent uppercase tracking-[0.4em] italic opacity-80 flex items-center justify-center md:justify-start gap-3">
+              <UsersIcon className="h-4 w-4" />
+              Unit density
+            </h4>
+            <div className="text-6xl font-black italic tracking-tighter uppercase">
+               {analytics.totalStats.teamSize}
+            </div>
+            <p className="text-xs font-bold text-slate-400 italic leading-relaxed max-w-[240px] mx-auto md:mx-0 opacity-60 uppercase tracking-widest">Unique personnel profiles with active submission nodes.</p>
           </div>
         </div>
       </div>
 
-      {/* 8. Rejected Expense Analysis */}
-      {analytics.rejectedAnalysis.length > 0 && (
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Rejection Analysis</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {analytics.rejectedAnalysis.map((reason, index) => (
-              <div key={index} className="bg-red-50 border border-red-200 rounded-lg p-4">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-red-800">
-                      {reason._id || 'No reason provided'}
-                    </p>
-                    <p className="text-2xl font-bold text-red-900 mt-2">{reason.count}</p>
-                    <p className="text-xs text-red-600 mt-1">rejections</p>
-                  </div>
-                  <XCircleIcon className="h-8 w-8 text-red-500" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* 10. Recent Activity */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Recent Team Expenses</h2>
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Employee
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Title
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Category
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Amount
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Date
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {analytics.recentActivity.map((expense) => (
-                <tr key={expense._id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">
-                      {expense.submittedBy.firstName} {expense.submittedBy.lastName}
-                    </div>
-                    <div className="text-xs text-gray-500">{expense.submittedBy.email}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {expense.title}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded">
-                      {expense.category}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {formatExpenseAmount(expense)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 text-xs font-medium rounded ${
-                      expense.status === 'approved' ? 'bg-green-100 text-green-800' :
-                      expense.status === 'rejected' ? 'bg-red-100 text-red-800' :
-                      expense.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-blue-100 text-blue-800'
-                    }`}>
-                      {expense.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(expense.date).toLocaleDateString()}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Summary Stats */}
-      <div className="bg-gradient-to-r from-teal-600 to-teal-700 rounded-lg shadow-lg p-6 text-white">
-        <h2 className="text-xl font-bold mb-4">Overall Summary</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <p className="text-teal-100 text-sm">Total Team Expenses</p>
-            <p className="text-3xl font-bold">${analytics.totalStats.totalAmount.toLocaleString()}</p>
-          </div>
-          <div>
-            <p className="text-teal-100 text-sm">Total Submissions</p>
-            <p className="text-3xl font-bold">{analytics.totalStats.totalCount}</p>
-          </div>
-          <div>
-            <p className="text-teal-100 text-sm">Team Members</p>
-            <p className="text-3xl font-bold">{analytics.totalStats.teamSize}</p>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

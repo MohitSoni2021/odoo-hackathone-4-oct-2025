@@ -72,7 +72,8 @@ const SuperAdminDashboard = () => {
       <div className="w-full">
         <div className="flex items-center justify-between mb-12 flex-wrap gap-6">
           <div className="flex items-center gap-6">
-            <div className="p-4 bg-primary rounded-2xl shadow-premium">
+            <div className="p-4 bg-primary rounded-xl shadow-premium">
+
               <ShieldCheckIcon className="h-8 w-8 text-white" />
             </div>
             <div>
@@ -82,8 +83,9 @@ const SuperAdminDashboard = () => {
           </div>
           <button 
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-2 px-8 py-4 bg-accent text-white rounded-2xl font-bold hover:bg-accent-dark transition-all shadow-premium hover:shadow-premium-lg active:scale-95 transform"
+            className="flex items-center gap-2 px-8 py-4 bg-accent text-white rounded-xl font-bold hover:bg-accent-dark transition-all shadow-premium hover:shadow-premium-lg active:scale-95 transform"
           >
+
             <KeyIcon className="h-5 w-5" />
             Change User Password
           </button>
@@ -92,7 +94,8 @@ const SuperAdminDashboard = () => {
         {/* Password Change Modal */}
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-primary/60 backdrop-blur-md animate-in fade-in duration-300">
-            <div className="bg-surface rounded-[2rem] w-full max-w-md shadow-premium-lg overflow-hidden animate-in zoom-in duration-300 border border-border">
+            <div className="bg-surface rounded-xl w-full max-w-md shadow-premium-lg overflow-hidden animate-in zoom-in duration-300 border border-border">
+
               <div className="p-10">
                 <div className="flex justify-between items-center mb-8">
                   <h2 className="text-h-l font-bold text-text-primary">Reset Password</h2>
@@ -140,7 +143,8 @@ const SuperAdminDashboard = () => {
 
         <div className="space-y-8">
           {hierarchy.map((company) => (
-            <div key={company._id} className="bg-surface rounded-3xl shadow-premium border border-border overflow-hidden transition-all hover:shadow-premium-lg">
+            <div key={company._id} className="bg-surface rounded-xl shadow-premium border border-border overflow-hidden transition-all hover:shadow-premium-lg">
+
               <button 
                 onClick={() => toggleExpand(company._id)}
                 className={`w-full flex items-center justify-between p-8 transition-colors ${expandedItems[company._id] ? 'bg-secondary' : 'hover:bg-secondary/50'}`}
@@ -230,7 +234,8 @@ const UserCard = ({ user, type }) => {
   };
 
   return (
-    <div className={`flex items-center p-5 border rounded-2xl transition-all duration-300 hover:shadow-premium group ${typeStyles[type]}`}>
+    <div className={`flex items-center p-5 border rounded-xl transition-all duration-300 hover:shadow-premium group ${typeStyles[type]}`}>
+
       <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-bold mr-4 shadow-sm group-hover:scale-110 transition-transform ${avatarStyles[type]}`}>
         {user.firstName[0]}{user.lastName[0]}
       </div>
