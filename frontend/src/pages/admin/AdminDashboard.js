@@ -65,28 +65,31 @@ const AdminDashboard = () => {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {statsCards.map((stat) => (
           <Link
             key={stat.name}
             to={stat.link}
-            className="group bg-surface rounded-2xl border border-border p-6 shadow-premium hover:shadow-premium-lg hover:border-accent/30 transition-all duration-300 transform hover:-translate-y-1"
+            className="group bg-surface rounded-3xl border border-border p-8 shadow-premium hover:shadow-premium-lg hover:border-accent/30 transition-all duration-300 transform hover:-translate-y-1"
           >
-            <div className="flex items-center justify-between mb-4">
-              <div className={`p-3 rounded-xl ${stat.color} bg-opacity-10`}>
-                <stat.icon className={`h-6 w-6 ${stat.color.replace('bg-', 'text-')}`} />
+            <div className="flex items-center justify-between mb-6">
+              <div className={`p-4 rounded-2xl ${stat.color} bg-opacity-10 shadow-sm`}>
+                <stat.icon className={`h-8 w-8 ${stat.color.replace('bg-', 'text-')}`} />
               </div>
-              <ArrowUpRightIcon className="h-4 w-4 text-text-muted group-hover:text-accent transition-colors" />
+              <div className="bg-secondary p-2 rounded-xl group-hover:bg-accent group-hover:text-white transition-colors">
+                <ArrowUpRightIcon className="h-5 w-5 text-text-muted group-hover:text-white transition-colors" />
+              </div>
             </div>
             <div>
-              <p className="text-xs font-bold text-text-muted uppercase tracking-widest mb-1">
+              <p className="text-body font-bold text-text-muted uppercase tracking-widest mb-2">
                 {stat.name}
               </p>
-              <h3 className="text-2xl font-bold text-text-primary">{stat.value}</h3>
+              <h3 className="text-4xl font-bold text-text-primary tracking-tight">{stat.value}</h3>
             </div>
           </Link>
         ))}
       </div>
+
 
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

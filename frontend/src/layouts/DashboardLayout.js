@@ -13,10 +13,13 @@ import {
   ArrowRightOnRectangleIcon,
   Bars3Icon,
   XMarkIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
 } from '@heroicons/react/24/outline';
 
 const DashboardLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -24,14 +27,10 @@ const DashboardLayout = () => {
   const { unreadCount } = useSelector((state) => state.notifications);
 
   useEffect(() => {
-    // Fetch unread notifications count
     dispatch(fetchUnreadCount());
-    
-    // Poll for new notifications every 30 seconds
     const interval = setInterval(() => {
       dispatch(fetchUnreadCount());
     }, 30000);
-
     return () => clearInterval(interval);
   }, [dispatch]);
 
@@ -40,7 +39,6 @@ const DashboardLayout = () => {
     navigate('/login');
   };
 
-  // Dynamic navigation based on role
   const getNavigation = () => {
     const baseNav = [
       { name: 'Dashboard', href: '/dashboard', icon: HomeIcon, roles: ['superadmin', 'admin', 'manager', 'employee'] },
@@ -84,35 +82,21 @@ const DashboardLayout = () => {
   };
 
   const navigation = getNavigation();
-
-  const filteredNavigation = navigation.filter((item) =>
-    item.roles.includes(user?.role)
-  );
-
+  const filteredNavigation = navigation.filter((item) => item.roles.includes(user?.role));
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex">
       {/* Mobile sidebar */}
-      <div
-        className={`fixed inset-0 z-40 lg:hidden ${
-          sidebarOpen ? 'block' : 'hidden'
-        }`}
-      >
-        <div
-          className="fixed inset-0 bg-primary/60 backdrop-blur-sm"
-          onClick={() => setSidebarOpen(false)}
-        ></div>
+      <div className={`fixed inset-0 z-40 lg:hidden ${sidebarOpen ? 'block' : 'hidden'}`}>
+        <div className="fixed inset-0 bg-primary/60 backdrop-blur-sm" onClick={() => setSidebarOpen(false)}></div>
         <div className="fixed inset-y-0 left-0 flex w-72 flex-col bg-primary shadow-2xl transition-transform duration-300 transform">
           <div className="flex items-center justify-between px-6 py-8">
             <h1 className="text-2xl font-bold tracking-tight text-white flex items-center">
               <span className="w-8 h-8 bg-accent rounded-lg mr-3 flex items-center justify-center text-white text-lg">I</span>
               Income<span className="text-accent">Tracker</span>
             </h1>
-            <button
-              onClick={() => setSidebarOpen(false)}
-              className="text-primary-light hover:text-white transition-colors"
-            >
+            <button onClick={() => setSidebarOpen(false)} className="text-primary-light hover:text-white transition-colors">
               <XMarkIcon className="h-6 w-6" />
             </button>
           </div>
@@ -123,9 +107,7 @@ const DashboardLayout = () => {
                 to={item.href}
                 onClick={() => setSidebarOpen(false)}
                 className={`group flex items-center px-4 py-3 text-body font-medium rounded-xl transition-all duration-200 ${
-                  isActive(item.href)
-                    ? 'bg-accent text-white shadow-premium'
-                    : 'text-text-muted hover:bg-primary-light hover:text-white'
+                  isActive(item.href) ? 'bg-accent text-white shadow-premium' : 'text-text-muted hover:bg-primary-light hover:text-white'
                 }`}
               >
                 <item.icon className={`mr-3 h-5 w-5 ${isActive(item.href) ? 'text-white' : 'text-text-muted group-hover:text-white'}`} />
@@ -140,22 +122,15 @@ const DashboardLayout = () => {
           </nav>
           <div className="border-t border-primary-light/30 p-6 bg-primary-dark/20">
             <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="h-12 w-12 rounded-xl bg-accent flex items-center justify-center text-white font-bold shadow-premium">
-                  {user?.firstName?.[0]}{user?.lastName?.[0]}
-                </div>
+              <div className="h-12 w-12 rounded-xl bg-accent flex items-center justify-center text-white font-bold shadow-premium">
+                {user?.firstName?.[0]}{user?.lastName?.[0]}
               </div>
               <div className="ml-4 overflow-hidden">
-                <p className="text-body font-semibold text-white truncate">
-                  {user?.firstName} {user?.lastName}
-                </p>
+                <p className="text-body font-semibold text-white truncate">{user?.firstName} {user?.lastName}</p>
                 <p className="text-small text-text-muted capitalize truncate">{user?.role}</p>
               </div>
             </div>
-            <button
-              onClick={handleLogout}
-              className="mt-6 w-full flex items-center justify-center px-4 py-3 text-body font-semibold text-white bg-primary-light/50 rounded-xl hover:bg-error/80 transition-all duration-300 group"
-            >
+            <button onClick={handleLogout} className="mt-6 w-full flex items-center justify-center px-4 py-3 text-body font-semibold text-white bg-primary-light/50 rounded-xl hover:bg-error/80 transition-all duration-300 group">
               <ArrowRightOnRectangleIcon className="mr-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               Logout
             </button>
@@ -164,63 +139,80 @@ const DashboardLayout = () => {
       </div>
 
       {/* Desktop sidebar */}
-      <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-72 lg:flex-col">
-        <div className="flex flex-col flex-grow bg-primary overflow-y-auto border-r border-border/10 shadow-premium">
-          <div className="flex items-center flex-shrink-0 px-8 py-10">
-            <h1 className="text-2xl font-bold tracking-tight text-white flex items-center">
-              <span className="w-10 h-10 bg-accent rounded-xl mr-4 flex items-center justify-center text-white text-xl shadow-premium">I</span>
-              Income<span className="text-accent">Tracker</span>
-            </h1>
+      <div 
+        className={`hidden lg:fixed lg:inset-y-0 lg:flex lg:flex-col transition-all duration-300 ease-in-out ${
+          isCollapsed ? 'lg:w-24' : 'lg:w-72'
+        }`}
+      >
+        <div className="flex flex-col flex-grow bg-primary overflow-y-auto border-r border-border/10 shadow-premium relative">
+          {/* Collapse Toggle Button */}
+          <button
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className="absolute top-10 -right-4 z-20 bg-accent text-white p-1.5 rounded-full shadow-premium hover:bg-accent-dark transition-all transform hover:scale-110 active:scale-95"
+          >
+            {isCollapsed ? <ChevronRightIcon className="h-4 w-4" /> : <ChevronLeftIcon className="h-4 w-4" />}
+          </button>
+
+          <div className={`flex items-center flex-shrink-0 py-10 transition-all duration-300 ${isCollapsed ? 'px-6' : 'px-8'}`}>
+            <div className="flex items-center overflow-hidden">
+              <div className="flex-shrink-0 w-10 h-10 bg-accent rounded-xl flex items-center justify-center text-white text-xl shadow-premium">I</div>
+              {!isCollapsed && (
+                <h1 className="ml-4 text-2xl font-bold tracking-tight text-white whitespace-nowrap animate-in slide-in-from-left duration-300">
+                  Income<span className="text-accent">Tracker</span>
+                </h1>
+              )}
+            </div>
           </div>
-          <nav className="flex-1 space-y-2 px-6 py-4">
+
+          <nav className={`flex-1 space-y-2 py-4 transition-all duration-300 ${isCollapsed ? 'px-4' : 'px-6'}`}>
             {filteredNavigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
-                className={`group flex items-center px-4 py-3 text-body font-medium rounded-xl transition-all duration-200 ${
-                  isActive(item.href)
-                    ? 'bg-accent text-white shadow-premium'
-                    : 'text-text-muted hover:bg-primary-light hover:text-white'
-                }`}
+                className={`group flex items-center py-3 text-body font-medium rounded-xl transition-all duration-200 relative ${
+                  isActive(item.href) ? 'bg-accent text-white shadow-premium' : 'text-text-muted hover:bg-primary-light hover:text-white'
+                } ${isCollapsed ? 'justify-center px-0' : 'px-4'}`}
+                title={isCollapsed ? item.name : ''}
               >
-                <item.icon className={`mr-3 h-5 w-5 ${isActive(item.href) ? 'text-white' : 'text-text-muted group-hover:text-white'}`} />
-                {item.name}
+                <item.icon className={`h-5 w-5 flex-shrink-0 transition-all duration-300 ${isCollapsed ? '' : 'mr-3'} ${isActive(item.href) ? 'text-white' : 'text-text-muted group-hover:text-white'}`} />
+                {!isCollapsed && <span className="whitespace-nowrap transition-opacity duration-300">{item.name}</span>}
                 {item.name === 'Notifications' && unreadCount > 0 && (
-                  <span className="ml-auto inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white bg-error rounded-full">
+                  <span className={`inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white bg-error rounded-full ${isCollapsed ? 'absolute top-1 right-1 h-5 w-5 p-0' : 'ml-auto'}`}>
                     {unreadCount}
                   </span>
                 )}
               </Link>
             ))}
           </nav>
-          <div className="border-t border-primary-light/30 p-8 bg-primary-dark/20">
+
+          <div className={`border-t border-primary-light/30 bg-primary-dark/20 transition-all duration-300 ${isCollapsed ? 'p-4' : 'p-8'}`}>
             <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="h-12 w-12 rounded-xl bg-accent flex items-center justify-center text-white font-bold shadow-premium">
-                  {user?.firstName?.[0]}{user?.lastName?.[0]}
+              <div className="flex-shrink-0 h-12 w-12 rounded-xl bg-accent flex items-center justify-center text-white font-bold shadow-premium">
+                {user?.firstName?.[0]}{user?.lastName?.[0]}
+              </div>
+              {!isCollapsed && (
+                <div className="ml-4 overflow-hidden animate-in slide-in-from-left duration-300">
+                  <p className="text-body font-semibold text-white truncate">{user?.firstName} {user?.lastName}</p>
+                  <p className="text-small text-text-muted capitalize truncate">{user?.role}</p>
                 </div>
-              </div>
-              <div className="ml-4 overflow-hidden">
-                <p className="text-body font-semibold text-white truncate">
-                  {user?.firstName} {user?.lastName}
-                </p>
-                <p className="text-small text-text-muted capitalize truncate">{user?.role}</p>
-              </div>
+              )}
             </div>
-            <button
-              onClick={handleLogout}
-              className="mt-6 w-full flex items-center justify-center px-4 py-3 text-body font-semibold text-white bg-primary-light/50 rounded-xl hover:bg-error/80 transition-all duration-300 group"
+            <button 
+              onClick={handleLogout} 
+              className={`mt-6 flex items-center justify-center text-body font-semibold text-white bg-primary-light/50 rounded-xl hover:bg-error/80 transition-all duration-300 group ${isCollapsed ? 'w-12 h-12' : 'w-full py-3 px-4'}`}
+              title={isCollapsed ? 'Logout' : ''}
             >
-              <ArrowRightOnRectangleIcon className="mr-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              Logout
+              <ArrowRightOnRectangleIcon className={`h-5 w-5 group-hover:translate-x-1 transition-transform ${isCollapsed ? '' : 'mr-2'}`} />
+              {!isCollapsed && <span>Logout</span>}
             </button>
           </div>
         </div>
       </div>
 
-
       {/* Main content */}
-      <div className="lg:pl-72 flex flex-col flex-1 min-h-screen">
+      <div className={`flex flex-col flex-1 min-h-screen transition-all duration-300 ease-in-out ${
+        isCollapsed ? 'lg:pl-24' : 'lg:pl-72'
+      }`}>
         {/* Top bar */}
         <div className="sticky top-0 z-10 flex h-20 flex-shrink-0 bg-surface/80 backdrop-blur-md border-b border-border shadow-premium">
           <button
@@ -263,13 +255,12 @@ const DashboardLayout = () => {
         {/* Page content */}
         <main className="flex-1 overflow-y-auto">
           <div className="py-8">
-            <div className="mx-auto max-w-7xl px-4 sm:px-8 md:px-10">
+            <div className="w-full px-4 sm:px-8 md:px-10">
               <Outlet />
             </div>
           </div>
         </main>
       </div>
-
     </div>
   );
 };

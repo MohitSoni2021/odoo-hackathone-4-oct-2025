@@ -69,7 +69,7 @@ const SuperAdminDashboard = () => {
 
   return (
     <div className="animate-in fade-in duration-700">
-      <div className="max-w-6xl mx-auto">
+      <div className="w-full">
         <div className="flex items-center justify-between mb-12 flex-wrap gap-6">
           <div className="flex items-center gap-6">
             <div className="p-4 bg-primary rounded-2xl shadow-premium">

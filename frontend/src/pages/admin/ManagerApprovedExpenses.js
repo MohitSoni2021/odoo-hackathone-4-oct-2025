@@ -88,7 +88,7 @@ const ManagerApprovedExpenses = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white border-2 rounded-xl border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center space-x-4">
             <div className="w-9 h-9 bg-teal-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">E</span>
@@ -103,7 +103,7 @@ const ManagerApprovedExpenses = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <div className="bg-white rounded-xl border border-gray-200 p-6">

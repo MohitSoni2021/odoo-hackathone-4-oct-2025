@@ -76,7 +76,7 @@ const UserManagement = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="w-9 h-9 bg-teal-600 rounded-lg flex items-center justify-center">
@@ -108,7 +108,7 @@ const UserManagement = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
         {/* Filters */}
         <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
